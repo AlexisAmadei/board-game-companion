@@ -3,6 +3,8 @@ import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { db } from '../config/firebase';
 import { useParams } from 'react-router-dom';
+import WaitingDots from '../components/WaitingDots';
+import './styles/Display.css';
 
 export default function Display() {
     const { roomId } = useParams();
@@ -16,7 +18,6 @@ export default function Display() {
                 setRoomData(snapshot.data());
             }
         });
-
         return () => unsubscribe();
     }, [roomId]);
 
@@ -42,19 +43,22 @@ export default function Display() {
                 <div>
                     <h1>{roomData.name} - {roomData.gameId}</h1>
                     <p>{roomData.players?.length || 0} players</p>
-                    <ul>
+                    <ul className='display-players'>
                         {roomData.players?.map((playerName, index) => (
-                            <li key={index}>{playerName}</li>
+                            <div className='item'>
+                                <button id='kick-player' onClick={() => kickPlayer(playerName)}>Kick</button>
+                                <li key={index}>{playerName}</li>
+                            </div>
                         ))}
                     </ul>
                     {!roomData.votingPhase?.inProgress && (
                         <button onClick={startVotingPhase}>Start Voting Phase</button>
                     )}
-                    {roomData.votingPhase?.inProgress && <h3>Voting is in progress...</h3>}
+                    {roomData.votingPhase?.inProgress && <WaitingDots text='Voting phase in progress' />}
                 </div>
             ) : (
                 <div>
-                    <h1>Loading room data...</h1>
+                    <WaitingDots text='Loading room data' />
                 </div>
             )}
         </Container>

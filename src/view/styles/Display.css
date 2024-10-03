@@ -1,0 +1,25 @@
+.display-players {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.display-players .item {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: center;
+}
+
+#kick-player {
+    padding: 4px 12px;
+    background-color: transparent;
+    border: 1px solid;
+    transition: all 0.2s;
+}
+
+#kick-player:hover {
+    border: 1px solid transparent;
+    background-color: #383733;
+}
