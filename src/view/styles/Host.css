@@ -1,0 +1,11 @@
+input {
+    border: 2px solid #0000;
+    border-radius: 5px;
+    color: var(--textColorOnWhite);
+    font-family: var(--textFont);
+    font-size: calc(4px + 3vmin);
+    min-width: 20px;
+    outline: none;
+    padding: 5px;
+    width: 40vmin;
+}

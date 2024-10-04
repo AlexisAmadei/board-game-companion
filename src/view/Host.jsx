@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../config/firebase';
 import { collection, doc, setDoc } from 'firebase/firestore'; // Using setDoc for room creation
 import { useNavigate } from 'react-router-dom';
+import './styles/Host.css'
 
 const Host = () => {
     const [gameName, setGameName] = useState('');

@@ -1,15 +1,25 @@
-.display-players {
-    list-style: none;
+.display-container {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    justify-content: center;
+    align-items: center;
 }
 
+.display-players {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Divise en colonnes */
+    grid-auto-rows: auto;
+    gap: 16px;
+    justify-content: center;
+    align-items: start;
+}
 .display-players .item {
     display: flex;
     flex-direction: row;
-    gap: 16px;
+    gap: 2px;
     align-items: center;
+    font-size: 24px;
 }
 
 #kick-player {
@@ -17,9 +27,23 @@
     background-color: transparent;
     border: 1px solid;
     transition: all 0.2s;
+    font-size: 24px;
 }
 
 #kick-player:hover {
     border: 1px solid transparent;
     background-color: #383733;
+}
+
+.display-results {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.display-results .item {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
 }
