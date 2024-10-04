@@ -17,6 +17,28 @@ export default function JoinRoom() {
   const [votingPhase, setVotingPhase] = useState(false);
   const [selectedVote, setSelectedVote] = useState(null); // New state for selected vote
 
+  const submitVote = async () => {
+    if (roomData.votingPhase.votes[playerName]) {
+      alert('You have already voted');
+      return;
+    }
+    if (selectedVote) {
+      console.log('submitting vote', selectedVote);
+      const roomRef = doc(db, 'rooms', roomId);
+      await updateDoc(roomRef, {
+        [`votingPhase.votes.${playerName}`]: selectedVote,
+      });
+    }
+  }
+
+  function hasVoted() {
+    console.log('playerName', playerName);
+    if (roomData.votingPhase.votes[playerName]) {
+      return true;
+    }
+    return false;
+  };
+
   useEffect(() => {
     const roomRef = doc(db, 'rooms', roomId);
     const fetchRoom = async () => {
@@ -51,6 +73,10 @@ export default function JoinRoom() {
       console.log('voting phase started');
       setVotingPhase(true);
     }
+    if (roomData && hasVoted()) {
+      setSelectedVote('done');
+      setVotingPhase(false);
+    }
   }, [roomData]);
 
   const handleVote = (vote) => {
@@ -66,44 +92,46 @@ export default function JoinRoom() {
     return selectedVote === cardType ? 'selected' : 'not-selected';
   };
 
+
   return (
     <Container div="game-container">
       {roomData ? (
-         <div>
-          <h1><span style={{ fontStyle: 'italic' }}>{roomData.name}</span></h1>
-          <ul className='display-players'>
+        <div className='game-view'>
+          <h1><span style={{ fontStyle: 'italic' }}>Party: {roomData.name} - {roomData.gameId}</span></h1>
+          <div className='display-players'>
             {roomData.players.map((player, index) => (
-              <li key={index} className='item' style={{ gap: '4px' }}>
+              <div key={index} className='item' style={{ gap: '4px' }}>
                 <PersonRoundedIcon />
                 {player}
-              </li>
-            ))}
-          </ul>
-          <div>
-            {!votingPhase ? (
-              <WaitingDots text='Waiting for voting phase' />
-            ) : (
-              <div className='votingPhase'>
-                <div className='voting-cards'>
-                  <div
-                    className={`item vote-ja ${getCardClass('yes')}`}
-                    onClick={() => handleVote('yes')}
-                  >
-                    <img src={CardYes} alt='Ja' height={window.innerWidth < 600 ? 100 : 200} />
-                    <p style={{ padding: 0, margin: 0 }}>Ja</p>
-                  </div>
-                  <div
-                    className={`item vote-no ${getCardClass('no')}`}
-                    onClick={() => handleVote('no')}
-                  >
-                    <img src={CardNo} alt='Nein' height={window.innerWidth < 600 ? 100 : 200} />
-                    <p style={{ padding: 0, margin: 0 }}>Nein</p>
-                  </div>
-                </div>
-                <button id='submit-vote'>Valider</button>
               </div>
-            )}
+            ))}
           </div>
+          {(!votingPhase && selectedVote !== 'done')  ? (
+            <WaitingDots text='Waiting for voting phase' />
+          ) : (selectedVote !== 'done') ? (
+            <div className='votingPhase'>
+              <div className='voting-cards'>
+                <div
+                  className={`item vote-ja ${getCardClass('yes')}`}
+                  onClick={() => handleVote('yes')}
+                >
+                  <img src={CardYes} alt='Ja' height={window.innerWidth < 600 ? 100 : 200} />
+                </div>
+                <div
+                  className={`item vote-no ${getCardClass('no')}`}
+                  onClick={() => handleVote('no')}
+                >
+                  <img src={CardNo} alt='Nein' height={window.innerWidth < 600 ? 100 : 200} />
+                </div>
+              </div>
+              <button className='submit-vote' onClick={submitVote}>Valider</button>
+            </div>
+          ): null }
+          {selectedVote === 'done' && (
+            <div>
+              <h2>Vous avez voté</h2>
+            </div>
+          )}
         </div>
       ) : (
         <WaitingDots text="Loading room data" />

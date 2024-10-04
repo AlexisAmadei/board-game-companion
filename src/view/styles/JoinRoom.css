@@ -5,6 +5,14 @@
     justify-content: center !important;
 }
 
+.game-view {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10%;
+    align-items: center;
+    justify-content: center;
+}
+
 .votingPhase {
     display: flex;
     transition: all 0.3s ease;
@@ -18,24 +26,34 @@
 .voting-cards {
     display: flex;
     flex-direction: row;
-    gap: 8px;
+    gap: 16px;
     width: 100%;
     justify-content: space-between;
 }
 
 .item {
-    transition: transform 0.5s ease, opacity 0.5s ease;
+    transition: transform 0.2s ease, opacity 0.5s ease;
 }
 
 .selected {
-    transform: scale(1.2);
+    transform: scale(1.08);
 }
 
 .not-selected {
-    transform: scale(0.8);
+    transform: scale(1);
     opacity: .8;
 }
 
 .votingPhase .item:hover {
     cursor: pointer;
+}
+
+.game-view .display-players {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 0;
+    flex-wrap: wrap;
 }

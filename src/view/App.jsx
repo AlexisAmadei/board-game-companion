@@ -60,12 +60,12 @@ export default function App() {
     <div className='app-wrapper'>
       <img src='https://www.ultraboardgames.com/secret-hitler/gfx/secret-hitler-banner.jpg' alt='Secret' width={'100%'} />
       <Box className='actions-button'>
-        <Button variant='contained' color='primary' onClick={handleHostGame}>
+        <button onClick={handleHostGame}>
           Host game
-        </Button>
-        <Button variant='contained' color='secondary' onClick={enterRoomId}>
+        </button>
+        <button onClick={enterRoomId}>
           Join game
-        </Button>
+        </button>
       </Box>
       <Modal open={isModalRoomIdOpen} onClose={() => setIsModalRoomIdOpen(false)}>
         <Box className='modal-content'>

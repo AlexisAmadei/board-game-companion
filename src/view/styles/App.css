@@ -1,6 +1,11 @@
 .app-wrapper {
   background-color: var(--primary);
   color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 #root {
@@ -22,7 +27,6 @@
 
 .actions-buttons {
   display: flex;
-  gap: 8px;
 }
 
 /* App.css */
