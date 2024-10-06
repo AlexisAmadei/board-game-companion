@@ -65,3 +65,21 @@
   cursor: pointer;
   background-color: var(--background);
 }
+
+footer {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-top: 20px;
+  position: absolute;
+  bottom: 0;
+  align-items: center;
+}
+
+footer a {
+  color: var(--text);
+  text-decoration: none;
+}
+footer a:hover {
+  color: var(--secondary);
+}

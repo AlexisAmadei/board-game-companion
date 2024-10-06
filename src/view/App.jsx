@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, updateDoc, query, where } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import './styles/App.css';
+import logo from '../assets/kiwiDevLogo-transparent.png';
 
 export default function App() {
   const navigate = useNavigate();
@@ -67,6 +68,10 @@ export default function App() {
           Join game
         </button>
       </Box>
+      <footer>
+        <a href='https://alexisamadei.fr/' target='_blank' >by Kiwi Dev</a>
+        <img src={logo}  alt='Kiwi Dev logo' width={'30px'} height={'30px'} />
+      </footer>
       <Modal open={isModalRoomIdOpen} onClose={() => setIsModalRoomIdOpen(false)} className='join-modal'>
         <Box className='modal-content'>
           <input
