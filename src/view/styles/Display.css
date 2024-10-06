@@ -21,6 +21,9 @@
     align-items: center;
     font-size: 24px;
 }
+.display-players .item p {
+    margin: 2px 0;
+}
 
 #kick-player {
     padding: 4px 12px;
@@ -46,4 +49,9 @@
     flex-direction: row;
     gap: 8px;
     align-items: center;
+}
+
+#countPlayers {
+    font-size: 24px;
+    margin: auto;
 }

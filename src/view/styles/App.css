@@ -29,14 +29,26 @@
   display: flex;
 }
 
-/* App.css */
+/* Modal classes*/
+.join-modal {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
 .modal-content {
-  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
   margin: auto;
-  text-align: center;
+  padding: 20px;
   border-radius: 8px;
   width: 300px;
+  background-color: var(--tertiary);
+
 }
 
 .input-field {
@@ -47,13 +59,9 @@
 
 .join-button {
   padding: 10px 20px;
-  background-color: #1976d2;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-}
-
-.join-button:hover {
-  background-color: #1565c0;
+  background-color: var(--background);
 }

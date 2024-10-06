@@ -67,9 +67,8 @@ export default function App() {
           Join game
         </button>
       </Box>
-      <Modal open={isModalRoomIdOpen} onClose={() => setIsModalRoomIdOpen(false)}>
+      <Modal open={isModalRoomIdOpen} onClose={() => setIsModalRoomIdOpen(false)} className='join-modal'>
         <Box className='modal-content'>
-          <Typography variant='h5'>Enter Room ID and Your Name</Typography>
           <input
             type='text'
             placeholder='Room ID'

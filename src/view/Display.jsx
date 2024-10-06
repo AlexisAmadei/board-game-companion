@@ -14,6 +14,9 @@ export default function Display() {
     const [roomData, setRoomData] = useState({});
     const [gameStarted, setGameStarted] = useState(false);
     const [voteResults, setVoteResults] = useState({ ja: 0, nein: 0 });
+    const [voteCount, setVoteCount] = useState(0);
+    const [playerCount, setPlayerCount] = useState(0);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         const roomRef = doc(db, 'rooms', roomId);
@@ -26,11 +29,22 @@ export default function Display() {
     }, [roomId]);
 
     const startVotingPhase = async () => {
+        // if (playerCount < 5) {
+        //     setErrorMessage('Minimum player count is 5');
+        //     return;
+        // }
         const roomRef = doc(db, 'rooms', roomId);
         await updateDoc(roomRef, {
             "votingPhase.inProgress": true,
             "votingPhase.votes": {},
             "votingPhase.totalVotes": 0,
+        });
+    };
+
+    const endVotingPhase = async () => {
+        const roomRef = doc(db, 'rooms', roomId);
+        await updateDoc(roomRef, {
+            "votingPhase.inProgress": false,
         });
     };
 
@@ -52,12 +66,29 @@ export default function Display() {
         }
     }, [roomData]);
 
+    useEffect(() => {
+        if (roomData.votingPhase?.inProgress) {
+            const votes = roomData.votingPhase.votes || {};
+            const totalVotes = Object.keys(votes).length;
+            setVoteCount(totalVotes);
+        }
+        if (roomData.players) {
+            setPlayerCount(roomData.players.length);
+        }
+    }, [roomData]);
+
+    useEffect(() => { // clear error message after 10 seconds
+        setTimeout(() => {
+            setErrorMessage(null);
+        }, 10000);
+    }, [errorMessage]);
+
     return (
         <Container className='display-container'>
             {roomData && roomData.name ? (
                 <div className='game-view'>
                     <h1>{roomData.name} - {roomData.gameId}</h1>
-                    <p>{roomData.players?.length || 0} players</p>
+                    <p id='countPlayers'>{roomData.players?.length || 0} players</p>
                     <div className='display-players'>
                         {roomData.players?.map((playerName, index) => (
                             <div className='item' key={index}>
@@ -69,14 +100,17 @@ export default function Display() {
 
                     {roomData.votingPhase?.inProgress && <WaitingDots text='Voting phase in progress' />}
                     {!roomData.votingPhase?.inProgress ? (
-                        <button onClick={startVotingPhase}>Start Voting Phase</button>
+                        <div style={{ display:'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', gap:'8px'}}>
+                            <button onClick={startVotingPhase}>Start Voting Phase</button>
+                            <span>{errorMessage && <span className='error-message'>{errorMessage}</span>}</span>
+                        </div>
                     ) : (
                         <div className='display-results'>
                             <h2 className='item'><img src={jaCard} height={'50px'} />Ja: {voteResults.ja}</h2>
                             <h2 className='item'><img src={neinCard} height={'50px'} />Nein: {voteResults.nein}</h2>
+                            <button onClick={endVotingPhase} >End voting Phase {voteCount}/{playerCount}</button>
                         </div>
                     )}
-
                 </div>
             ) : (
                 <div className='waiting-data'>

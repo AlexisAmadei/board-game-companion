@@ -15,11 +15,17 @@ export default function JoinRoom() {
   const [roomData, setRoomData] = useState(null);
   const playerName = localStorage.getItem('playerName') || 'Guest';
   const [votingPhase, setVotingPhase] = useState(false);
-  const [selectedVote, setSelectedVote] = useState(null); // New state for selected vote
+  const [selectedVote, setSelectedVote] = useState(null);
+  const [voteNumber, setVoteNumber] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const submitVote = async () => {
     if (roomData.votingPhase.votes[playerName]) {
       alert('You have already voted');
+      return;
+    }
+    if (!selectedVote) {
+      setErrorMessage('Please select a vote');
       return;
     }
     if (selectedVote) {
@@ -92,6 +98,13 @@ export default function JoinRoom() {
     return selectedVote === cardType ? 'selected' : 'not-selected';
   };
 
+  // if voting phase end in roomData, clear selectedVote
+  useEffect(() => {
+    if (roomData && roomData.votingPhase?.inProgress === false) {
+      setSelectedVote(null);
+      setVotingPhase(false);
+    }
+  }, [roomData]);
 
   return (
     <Container div="game-container">
@@ -125,6 +138,7 @@ export default function JoinRoom() {
                 </div>
               </div>
               <button className='submit-vote' onClick={submitVote}>Valider</button>
+              {errorMessage && <p>{errorMessage}</p>}
             </div>
           ): null }
           {selectedVote === 'done' && (
