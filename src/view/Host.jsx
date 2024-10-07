@@ -1,26 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../config/firebase';
-import { collection, doc, setDoc } from 'firebase/firestore'; // Using setDoc for room creation
+import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import './styles/Host.css'
+import './styles/Host.css';
+import ErrorMessage from '../components/ErrorMessage';
+import fetchCollection from '../utils/fetchCollection';
 
 const Host = () => {
     const [gameName, setGameName] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const navigate = useNavigate();
     const [roomId, setRoomId] = useState('');
+    const [rooms, setRooms] = useState([]);
+    const navigate = useNavigate();
 
-    function createRoomId() {
-        setRoomId(Math.random().toString(36).substring(2, 9)); // A more concise roomId
+    async function createRoomId() {
+        const roomsData = await fetchCollection(db, 'rooms');
+        const newRoomId = Math.random().toString(36).substring(2, 7);
+        const roomExists = roomsData.some((room) => room.gameId === newRoomId);
+
+        if (roomExists) {
+            return await createRoomId();
+        } else {
+            setRoomId(newRoomId);
+        }
     }
 
     useEffect(() => {
-        createRoomId();
+        const fetchRooms = async () => {
+            const roomsData = await fetchCollection(db, 'rooms');
+            setRooms(roomsData);
+        };
+        fetchRooms();
     }, []);
+
+    useEffect(() => {
+        if (rooms.length > 0) {
+            createRoomId();
+        }
+    }, [rooms]);
+
+    function validerNomDeSalle(nom) {
+        const regex = /^[A-Za-z\s]+$/;
+        return regex.test(nom);
+    }
 
     const createGame = async () => {
         if (!gameName.trim()) {
             setErrorMessage('Le nom de l\'hôte et le nom de la partie ne peuvent pas être vides.');
+            return;
+        }
+        if (!validerNomDeSalle(gameName)) {
+            setErrorMessage('Le nom de la salle ne doit contenir que des lettres.');
             return;
         }
         try {
@@ -44,6 +74,12 @@ const Host = () => {
         }
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            createGame();
+        }
+    };
+
     return (
         <div style={{ padding: '20px' }}>
             <h1>Créer une partie</h1>
@@ -53,11 +89,12 @@ const Host = () => {
                 value={gameName}
                 onChange={(e) => setGameName(e.target.value)}
                 style={{ padding: '10px', marginRight: '10px' }}
+                onKeyDown={handleKeyDown}
             />
             <button onClick={createGame} style={{ padding: '10px 20px' }}>
                 Créer
             </button>
-            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+            <ErrorMessage message={errorMessage} setErrorMessage={setErrorMessage} />
         </div>
     );
 };
