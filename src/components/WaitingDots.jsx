@@ -40,7 +40,6 @@ export default function LoadingDots(props) {
 
   return (
     <div>
-      {/* Inject the keyframes directly into a style tag */}
       <style>{blinkAnimation}</style>
       <div style={containerStyle}>
         <span>{text}</span>

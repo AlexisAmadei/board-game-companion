@@ -21,11 +21,11 @@ export default function JoinRoom() {
 
   const submitVote = async () => {
     if (roomData.votingPhase.votes[playerName]) {
-      alert('You have already voted');
+      alert('Vous avez déjà voté');
       return;
     }
     if (!selectedVote) {
-      setErrorMessage('Please select a vote');
+      setErrorMessage('Selectionnez un vote');
       return;
     }
     if (selectedVote) {
@@ -67,7 +67,7 @@ export default function JoinRoom() {
 
   useEffect(() => {
     if (roomData && !roomData.players.includes(playerName)) {
-      alert('You have been kicked from the room');
+      alert('Vous avez été retiré de la partie (take the L)');
       window.location.href = '/';
     }
   }, [roomData, playerName]);
@@ -106,7 +106,7 @@ export default function JoinRoom() {
     <Container div="game-container">
       {roomData ? (
         <div className='game-view'>
-          <h1><span style={{ fontStyle: 'italic' }}>Party: {roomData.name} - {roomData.gameId}</span></h1>
+          <h1><span style={{ fontStyle: 'italic' }}>Partie: {roomData.name} - {roomData.gameId}</span></h1>
           <div className='display-players'>
             {roomData.players.map((player, index) => (
               <div key={index} className='item' style={{ gap: '4px' }}>
@@ -144,7 +144,7 @@ export default function JoinRoom() {
           )}
         </div>
       ) : (
-        <WaitingDots text="Loading room data" />
+        <WaitingDots text="Chargement en cours" />
       )}
     </Container>
   );

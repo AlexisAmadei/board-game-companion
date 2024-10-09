@@ -20,21 +20,21 @@ export default function App() {
   const joinRoom = async (pseudo) => {
     try {
       if (!roomId.trim() || !pseudo.trim()) {
-        setErrorMessage('Room ID and Player Name cannot be empty.');
+        setErrorMessage('L\'ID de la partie et le nom du joueur ne peuvent pas être vides.');
         return;
       }
       const roomRef = collection(db, 'rooms');
       const q = query(roomRef, where('gameId', '==', roomId));
       const roomSnapshot = await getDocs(q);
       if (roomSnapshot.empty) {
-        setErrorMessage('Room not found. Please check the Room ID.');
+        setErrorMessage('partie non trouvée, veuillez vérifier l\'ID de la partie.');
         return;
       }
       roomSnapshot.forEach(async (doc) => {
         const roomData = doc.data();
         const updatedPlayers = [...roomData.players, pseudo];
         if (roomData.players.includes(pseudo)) {
-          setErrorMessage('Player already exists in this room.');
+          setErrorMessage('Joueur déjà présent dans la partie.');
           return;
         }
         await updateDoc(doc.ref, {
@@ -44,8 +44,8 @@ export default function App() {
         navigate(`/join/${roomId}`);
       });
     } catch (error) {
-      console.error('Error joining the room: ', error);
-      setErrorMessage('An error occurred while joining the room. Please try again.');
+      console.error('Erreur pendant la connexion à la partie: ', error);
+      setErrorMessage('Une erreur s\'est produite lors de la connexion à la partie.');
     }
   };
 
@@ -62,10 +62,10 @@ export default function App() {
       <img src='https://www.ultraboardgames.com/secret-hitler/gfx/secret-hitler-banner.jpg' alt='Secret' width={'100%'} />
       <Box className='actions-button'>
         <button onClick={handleHostGame}>
-          Host game
+          Créer
         </button>
         <button onClick={enterRoomId}>
-          Join game
+          Rejoindre
         </button>
       </Box>
       <footer>
@@ -89,7 +89,7 @@ export default function App() {
             className='input-field'
           />
           <button type='submit' onClick={handleJoinRoom} className='join-button'>
-            Join
+            Rejoindre
           </button>
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         </Box>

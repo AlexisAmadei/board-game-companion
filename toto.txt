@@ -1,3 +1,2 @@
-auto fin de vote quand tout le monde à voté
 responsive
 police sur le id

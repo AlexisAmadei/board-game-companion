@@ -35,7 +35,7 @@ export default function Display() {
 
     const startVotingPhase = async () => {
         if (playerCount < 5) {
-            setErrorMessage('Minimum player count is 5');
+             setErrorMessage('5 joueur minimum pour commencer la phase de vote');
             return;
         }
         const roomRef = doc(db, 'rooms', roomId);
@@ -116,40 +116,40 @@ export default function Display() {
             {roomData && roomData.name ? (
                 <div className='game-view'>
                     <h1>{roomData.name} - {roomData.gameId}</h1>
-                    <p id='countPlayers'>{roomData.players?.length || 0} players</p>
+                    <p id='countPlayers'>{roomData.players?.length || 0} joueurs</p>
                     <div className='display-players'>
                         {roomData.players?.map((playerName, index) => (
                             <div className='item' key={index}>
-                                <button id='kick-player' onClick={() => kickPlayer(playerName)}>Kick</button>
+                                <button id='kick-player' onClick={() => kickPlayer(playerName)}>Expulser</button>
                                 <p>{playerName}</p>
                             </div>
                         ))}
                     </div>
 
-                    {roomData.votingPhase?.inProgress && <WaitingDots text='Voting phase in progress' />}
+                    {roomData.votingPhase?.inProgress && <WaitingDots text='Phase de vote en cours' />}
                     {!roomData.votingPhase?.inProgress ? (
                         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
-                            <button onClick={startVotingPhase}>Start Voting Phase</button>
+                            <button onClick={startVotingPhase}>Commencer la phase de vote</button>
                             <span>{errorMessage && <span className='error-message'>{errorMessage}</span>}</span>
                         </div>
                     ) : (
                         <div className='display-results'>
                             <h2 className='item'><img src={jaCard} height={'50px'} />Ja: {voteResults.ja}</h2>
                             <h2 className='item'><img src={neinCard} height={'50px'} />Nein: {voteResults.nein}</h2>
-                            <button onClick={endVotingPhase} >End voting Phase {voteCount}/{playerCount}</button>
+                            <button onClick={endVotingPhase} >Terminer la phase de vote {voteCount}/{playerCount}</button>
                         </div>
                     )}
                     {displayResults.show && (
                         <div className='resultContainer'>
                             {displayResults.results.winner === 'ja' ? (
                                 <div className='winnerCard'>
-                                    <img src={jaCard} height={'200px'} alt='ja vote card' />
-                                    <p style={{ fontSize: '32px' }}>Chancelor elected with {displayResults.results.ja}% of the votes</p>
+                                    <img src={jaCard} height={'200px'} alt='carte de vote ja' />
+                                    <p style={{ fontSize: '32px' }}>Chancelier élu avec {displayResults.results.ja}% des votes</p>
                                 </div>
                             ) : (
                                 <div className='winnerCard'>
-                                    <img src={neinCard} height={'200px'} alt='nein vote card' />
-                                    <p style={{ fontSize: '32px' }}>Chancelor refused with {displayResults.results.nein}% of the votes</p>
+                                    <img src={neinCard} height={'200px'} alt='carte de vote nein' />
+                                    <p style={{ fontSize: '32px' }}>Chancelier refusé avec {displayResults.results.nein}% des votes</p>
                                 </div>
                             )}
                         </div>
@@ -157,7 +157,7 @@ export default function Display() {
                 </div>
             ) : (
                 <div className='waiting-data'>
-                    <WaitingDots text='Loading room data' />
+                    <WaitingDots text='Chargement des données de la salle' />
                 </div>
             )}
         </Container>
