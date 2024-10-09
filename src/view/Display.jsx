@@ -17,6 +17,11 @@ export default function Display() {
     const [voteCount, setVoteCount] = useState(0);
     const [playerCount, setPlayerCount] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
+    const [displayResults, setDisplayResults] = useState({
+        show: false,
+        results: {
+        },
+    });
 
     useEffect(() => {
         const roomRef = doc(db, 'rooms', roomId);
@@ -29,22 +34,15 @@ export default function Display() {
     }, [roomId]);
 
     const startVotingPhase = async () => {
-        // if (playerCount < 5) {
-        //     setErrorMessage('Minimum player count is 5');
-        //     return;
-        // }
+        if (playerCount < 5) {
+            setErrorMessage('Minimum player count is 5');
+            return;
+        }
         const roomRef = doc(db, 'rooms', roomId);
         await updateDoc(roomRef, {
             "votingPhase.inProgress": true,
             "votingPhase.votes": {},
             "votingPhase.totalVotes": 0,
-        });
-    };
-
-    const endVotingPhase = async () => {
-        const roomRef = doc(db, 'rooms', roomId);
-        await updateDoc(roomRef, {
-            "votingPhase.inProgress": false,
         });
     };
 
@@ -56,32 +54,62 @@ export default function Display() {
     };
 
     useEffect(() => {
+        if (roomData.players) {
+            setPlayerCount(roomData.players.length);
+        }
         if (roomData.votingPhase?.inProgress) {
             const votes = roomData.votingPhase.votes || {};
             const voteCount = {
                 ja: Object.values(votes).filter(vote => vote === "yes").length,
                 nein: Object.values(votes).filter(vote => vote === "no").length
             };
+            const totalVotes = Object.keys(votes).length;
+            setVoteCount(totalVotes);
             setVoteResults(voteCount);
         }
     }, [roomData]);
 
     useEffect(() => {
-        if (roomData.votingPhase?.inProgress) {
-            const votes = roomData.votingPhase.votes || {};
-            const totalVotes = Object.keys(votes).length;
-            setVoteCount(totalVotes);
+        if (voteCount === playerCount && voteCount !== 0) {
+            endVotingPhase();
         }
-        if (roomData.players) {
-            setPlayerCount(roomData.players.length);
-        }
-    }, [roomData]);
+    }, [voteCount, playerCount]);
 
-    useEffect(() => { // clear error message after 10 seconds
+    useEffect(() => {
         setTimeout(() => {
             setErrorMessage(null);
         }, 10000);
     }, [errorMessage]);
+
+    function calculateResults() {
+        const totalVotes = voteResults.ja + voteResults.nein;
+        if (totalVotes === 0) {
+            return;
+        }
+        if (!roomData.votingPhase || !roomData.votingPhase.votes) {
+            console.error('roomData.votingPhase or roomData.votingPhase.votes is undefined');
+            return;
+        }
+        const jaPercentage = (voteResults.ja / totalVotes) * 100;
+        const neinPercentage = (voteResults.nein / totalVotes) * 100;
+        const winningVote = voteResults.ja > voteResults.nein ? 'ja' : 'nein';
+        setDisplayResults({
+            show: true,
+            results: {
+                winner: winningVote,
+                ja: jaPercentage,
+                nein: neinPercentage,
+            }
+        });
+    }
+
+    const endVotingPhase = async () => {
+        const roomRef = doc(db, 'rooms', roomId);
+        await updateDoc(roomRef, {
+            "votingPhase.inProgress": false,
+        });
+        calculateResults();
+    };
 
     return (
         <Container className='display-container'>
@@ -100,7 +128,7 @@ export default function Display() {
 
                     {roomData.votingPhase?.inProgress && <WaitingDots text='Voting phase in progress' />}
                     {!roomData.votingPhase?.inProgress ? (
-                        <div style={{ display:'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', gap:'8px'}}>
+                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
                             <button onClick={startVotingPhase}>Start Voting Phase</button>
                             <span>{errorMessage && <span className='error-message'>{errorMessage}</span>}</span>
                         </div>
@@ -109,6 +137,21 @@ export default function Display() {
                             <h2 className='item'><img src={jaCard} height={'50px'} />Ja: {voteResults.ja}</h2>
                             <h2 className='item'><img src={neinCard} height={'50px'} />Nein: {voteResults.nein}</h2>
                             <button onClick={endVotingPhase} >End voting Phase {voteCount}/{playerCount}</button>
+                        </div>
+                    )}
+                    {displayResults.show && (
+                        <div className='resultContainer'>
+                            {displayResults.results.winner === 'ja' ? (
+                                <div className='winnerCard'>
+                                    <img src={jaCard} height={'200px'} alt='ja vote card' />
+                                    <p style={{ fontSize: '32px' }}>Chancelor elected with {displayResults.results.ja}% of the votes</p>
+                                </div>
+                            ) : (
+                                <div className='winnerCard'>
+                                    <img src={neinCard} height={'200px'} alt='nein vote card' />
+                                    <p style={{ fontSize: '32px' }}>Chancelor refused with {displayResults.results.nein}% of the votes</p>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>

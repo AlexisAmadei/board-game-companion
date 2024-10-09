@@ -29,7 +29,6 @@ export default function JoinRoom() {
       return;
     }
     if (selectedVote) {
-      console.log('submitting vote', selectedVote);
       const roomRef = doc(db, 'rooms', roomId);
       await updateDoc(roomRef, {
         [`votingPhase.votes.${playerName}`]: selectedVote,
@@ -38,7 +37,6 @@ export default function JoinRoom() {
   }
 
   function hasVoted() {
-    console.log('playerName', playerName);
     if (roomData.votingPhase.votes[playerName]) {
       return true;
     }
@@ -76,7 +74,6 @@ export default function JoinRoom() {
 
   useEffect(() => {
     if (roomData && roomData.votingPhase.inProgress === true) {
-      console.log('voting phase started');
       setVotingPhase(true);
     }
     if (roomData && hasVoted()) {
@@ -98,7 +95,6 @@ export default function JoinRoom() {
     return selectedVote === cardType ? 'selected' : 'not-selected';
   };
 
-  // if voting phase end in roomData, clear selectedVote
   useEffect(() => {
     if (roomData && roomData.votingPhase?.inProgress === false) {
       setSelectedVote(null);
@@ -119,7 +115,7 @@ export default function JoinRoom() {
               </div>
             ))}
           </div>
-          {(!votingPhase && selectedVote !== 'done')  ? (
+          {(!votingPhase && selectedVote !== 'done') ? (
             <WaitingDots text='Waiting for voting phase' />
           ) : (selectedVote !== 'done') ? (
             <div className='votingPhase'>
@@ -140,7 +136,7 @@ export default function JoinRoom() {
               <button className='submit-vote' onClick={submitVote}>Valider</button>
               {errorMessage && <p>{errorMessage}</p>}
             </div>
-          ): null }
+          ) : null}
           {selectedVote === 'done' && (
             <div>
               <h2>Vous avez voté</h2>
