@@ -43,7 +43,7 @@ const Host = () => {
     }, [rooms]);
 
     function validerNomDeSalle(nom) {
-        const regex = /^[A-Za-z\s]+$/;
+        const regex = /^[A-HJ-NP-Za-hj-np-z\s]+$/;
         return regex.test(nom);
     }
 

@@ -39,10 +39,12 @@ export default function Display() {
     }, [roomId]);
 
     const startVotingPhase = async () => {
-        if (playerCount < 5) {
-            setErrorMessage('5 joueur minimum pour commencer la phase de vote');
-            return;
-        }
+        // Player limit
+        // if (playerCount < 5) {
+        //     setErrorMessage('5 joueur minimum pour commencer la phase de vote');
+        //     return;
+        // }
+        setDisplayResults({ show: false, results: {} });
         const roomRef = doc(db, 'rooms', roomId);
         await updateDoc(roomRef, {
             "votingPhase.inProgress": true,
@@ -95,15 +97,15 @@ export default function Display() {
             console.error('roomData.votingPhase or roomData.votingPhase.votes is undefined');
             return;
         }
-        const jaPercentage = (voteResults.ja / totalVotes) * 100;
-        const neinPercentage = (voteResults.nein / totalVotes) * 100;
+        const jaCount = totalVotes - voteResults.nein;
+        const neinCount = totalVotes - voteResults.ja;
         const winningVote = voteResults.ja > voteResults.nein ? 'ja' : 'nein';
         setDisplayResults({
             show: true,
             results: {
                 winner: winningVote,
-                ja: jaPercentage,
-                nein: neinPercentage,
+                ja: jaCount,
+                nein: neinCount,
             }
         });
     }
@@ -130,7 +132,7 @@ export default function Display() {
                         <span id='roomId'>{roomData.gameId}</span>
                     </div>
 
-                    <div className='players-container'>
+                    <div className='players-container mobile-restrict'>
                         <p id='countPlayers'>{roomData.players?.length || 0} joueurs</p>
                         <IconButton id='expand-players' onClick={() => setPlayerListExpanded(prev => !prev)}>
                             {playerListExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
@@ -160,27 +162,30 @@ export default function Display() {
                     {roomData.votingPhase?.inProgress && <WaitingDots text='Phase de vote en cours' />}
                     {!roomData.votingPhase?.inProgress ? (
                         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
-                            <button onClick={startVotingPhase}>Commencer la phase de vote</button>
+                            <button onClick={startVotingPhase}>Commencer une phase de vote</button>
                             <span>{errorMessage && <span className='error-message'>{errorMessage}</span>}</span>
                         </div>
                     ) : (
-                        <div className='display-results'>
-                            <h2 className='item'><img src={jaCard} height={'50px'} />Ja: {voteResults.ja}</h2>
-                            <h2 className='item'><img src={neinCard} height={'50px'} />Nein: {voteResults.nein}</h2>
-                            <button onClick={endVotingPhase}>Terminer la phase de vote {voteCount}/{playerCount}</button>
-                        </div>
+                        // Live results
+                        // <div className='display-results'>
+                        //     <div className='cardresult'>
+                        //         <h2 className='item'><img src={jaCard} height={'50px'} />Ja: {voteResults.ja}</h2>
+                        //         <h2 className='item'><img src={neinCard} height={'50px'} />Nein: {voteResults.nein}</h2>
+                        //     </div>
+                        // </div>
+                        <button onClick={endVotingPhase}>Terminer la phase de vote {voteCount}/{playerCount}</button>
                     )}
                     {displayResults.show && (
                         <div className='resultContainer'>
                             {displayResults.results.winner === 'ja' ? (
                                 <div className='winnerCard'>
                                     <img src={jaCard} height={'200px'} alt='carte de vote ja' />
-                                    <p style={{ fontSize: '32px' }}>Chancelier élu avec {displayResults.results.ja}% des votes</p>
+                                    <p style={{ fontSize: '32px' }}>Chancelier élu avec {displayResults.results.ja} voix</p>
                                 </div>
                             ) : (
                                 <div className='winnerCard'>
                                     <img src={neinCard} height={'200px'} alt='carte de vote nein' />
-                                    <p style={{ fontSize: '32px' }}>Chancelier refusé avec {displayResults.results.nein}% des votes</p>
+                                    <p style={{ fontSize: '32px' }}>Chancelier refusé avec {displayResults.results.nein} voix </p>
                                 </div>
                             )}
                         </div>
