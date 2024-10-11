@@ -156,6 +156,7 @@ div#page-title {
     flex-direction: column;
     gap: 10px;
     margin-top: 8px;
+    margin-bottom: 16px;
     padding: 16px 16px;
     align-items: flex-start;
     border: 1px solid var(--tertiary);

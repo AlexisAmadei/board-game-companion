@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import './styles/Host.css';
 import ErrorMessage from '../components/ErrorMessage';
 import fetchCollection from '../utils/fetchCollection';
-import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 

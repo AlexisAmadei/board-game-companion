@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../config/firebase';
 import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
-import Container from '@mui/material/Container';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import WaitingDots from '../components/WaitingDots';
 import './styles/JoinRoom.css';
 
 import CardYes from '../assets/voting_ja.png';
 import CardNo from '../assets/voting_nein.png';
+import { Collapse, IconButton } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMoreRounded';
+import ExpandLessIcon from '@mui/icons-material/ExpandLessRounded';
 
 export default function JoinRoom() {
   const { roomId } = useParams();
@@ -16,8 +17,8 @@ export default function JoinRoom() {
   const playerName = localStorage.getItem('playerName') || 'Guest';
   const [votingPhase, setVotingPhase] = useState(false);
   const [selectedVote, setSelectedVote] = useState(null);
-  const [voteNumber, setVoteNumber] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+  const [playerListExpanded, setPlayerListExpanded] = useState(false);
 
   const submitVote = async () => {
     if (roomData.votingPhase.votes[playerName]) {
@@ -103,18 +104,31 @@ export default function JoinRoom() {
   }, [roomData]);
 
   return (
-    <Container div="game-container">
+    <div div="game-container">
       {roomData ? (
         <div className='game-view'>
-          <h1><span style={{ fontStyle: 'italic' }}>Partie: {roomData.name} - {roomData.gameId}</span></h1>
-          <div className='display-players'>
-            {roomData.players.map((player, index) => (
-              <div key={index} className='item' style={{ gap: '4px' }}>
-                <PersonRoundedIcon />
-                {player}
-              </div>
-            ))}
+          <div id='page-title'>
+            <h1 style={{ fontStyle: 'italic' }}>{roomData.name}</h1>
+            <span>{roomData.gameId}</span>
           </div>
+
+          <div className='players-container mobile-restrict'>
+            <p id='countPlayers'>{roomData.players?.length || 0} joueurs</p>
+            <IconButton id='expand-players' onClick={() => setPlayerListExpanded(prev => !prev)}>
+              {playerListExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </IconButton>
+          </div>
+          <Collapse in={playerListExpanded} timeout="auto" unmountOnExit id='collapse'>
+            <div className='player-dropdown'>
+              {roomData.players?.map((playerName, index) => (
+                <div className='item' key={index}>
+                  <button id='kick-player' onClick={() => kickPlayer(playerName)}>Expulser</button>
+                  <p>{playerName}</p>
+                </div>
+              ))}
+            </div>
+          </Collapse>
+
           {(!votingPhase && selectedVote !== 'done') ? (
             <WaitingDots text='Waiting for voting phase' />
           ) : (selectedVote !== 'done') ? (
@@ -146,6 +160,6 @@ export default function JoinRoom() {
       ) : (
         <WaitingDots text="Chargement en cours" />
       )}
-    </Container>
+    </div>
   );
 }
