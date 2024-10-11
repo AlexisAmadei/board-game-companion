@@ -57,3 +57,8 @@
     margin: 16px 0;
     flex-wrap: wrap;
 }
+
+.resultContainer {
+    text-align: center;
+    text-wrap: nowrap;
+}

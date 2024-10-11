@@ -185,15 +185,19 @@ export default function JoinRoom() {
           )}
           {displayResults.show && (
             <div className='resultContainer'>
-              {displayResults.results.winner === 'ja' ? (
+              {displayResults.results.ja > displayResults.results.nein ? (
                 <div className='winnerCard'>
-                  <img src={jaCard} height={'200px'} alt='carte de vote ja' />
+                  <img src={jaCard} height={200} alt='Ja' />
                   <p style={{ fontSize: '32px' }}>Chancelier élu avec {displayResults.results.ja} voix</p>
+                </div>
+              ) : displayResults.results.ja < displayResults.results.nein ? (
+                <div className='winnerCard'>
+                  <img src={neinCard} height={200} alt='Nein' />
+                  <p style={{ fontSize: '32px' }}>Chancelier refusé avec {displayResults.results.nein} voix</p>
                 </div>
               ) : (
                 <div className='winnerCard'>
-                  <img src={neinCard} height={'200px'} alt='carte de vote nein' />
-                  <p style={{ fontSize: '32px' }}>Chancelier refusé avec {displayResults.results.nein} voix </p>
+                  <p style={{ fontSize: '32px' }}>Égalité !</p>
                 </div>
               )}
             </div>

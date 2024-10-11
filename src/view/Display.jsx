@@ -90,6 +90,7 @@ export default function Display() {
     function calculateResults() {
         const totalVotes = voteResults.ja + voteResults.nein;
         if (totalVotes === 0) {
+            console.error('Unable to retrieve total votes');
             return;
         }
         if (!roomData.votingPhase || !roomData.votingPhase.votes) {
@@ -98,15 +99,26 @@ export default function Display() {
         }
         const jaCount = totalVotes - voteResults.nein;
         const neinCount = totalVotes - voteResults.ja;
-        const winningVote = voteResults.ja > voteResults.nein ? 'ja' : 'nein';
-        setDisplayResults({
-            show: true,
-            results: {
-                winner: winningVote,
-                ja: jaCount,
-                nein: neinCount,
-            }
-        });
+        if (jaCount === neinCount) {
+            setDisplayResults({
+                show: true,
+                results: {
+                    winner: 'tie',
+                    ja: jaCount,
+                    nein: neinCount,
+                }
+            });
+            return;
+        } else {
+            setDisplayResults({
+                show: true,
+                results: {
+                    winner: jaCount > neinCount ? 'ja' : 'nein',
+                    ja: jaCount,
+                    nein: neinCount,
+                }
+            });
+        }
     }
 
     const endVotingPhase = async () => {
@@ -164,13 +176,6 @@ export default function Display() {
                             <span>{errorMessage && <span className='error-message'>{errorMessage}</span>}</span>
                         </div>
                     ) : (
-                        // Live results
-                        // <div className='display-results'>
-                        //     <div className='cardresult'>
-                        //         <h2 className='item'><img src={jaCard} height={'50px'} />Ja: {voteResults.ja}</h2>
-                        //         <h2 className='item'><img src={neinCard} height={'50px'} />Nein: {voteResults.nein}</h2>
-                        //     </div>
-                        // </div>
                         <button onClick={endVotingPhase}>Terminer la phase de vote {voteCount}/{playerCount}</button>
                     )}
                     {displayResults.show && (
@@ -180,12 +185,16 @@ export default function Display() {
                                     <img src={jaCard} height={'200px'} alt='carte de vote ja' />
                                     <p style={{ fontSize: '32px' }}>Chancelier élu avec {displayResults.results.ja} voix</p>
                                 </div>
-                            ) : (
+                            ) : displayResults.results.winner === 'nein' ? (
                                 <div className='winnerCard'>
                                     <img src={neinCard} height={'200px'} alt='carte de vote nein' />
                                     <p style={{ fontSize: '32px' }}>Chancelier refusé avec {displayResults.results.nein} voix </p>
                                 </div>
-                            )}
+                            ) : displayResults.results.winner === 'tie' ? (
+                                <div className='winnerCard'>
+                                    <p style={{ fontSize: '32px' }}>Égalité avec {displayResults.results.ja} voix pour Ja et {displayResults.results.nein} voix pour Nein</p>
+                                </div>
+                            ) : null}
                         </div>
                     )}
                 </div>
