@@ -9,14 +9,13 @@ import WaitingDots from '../components/WaitingDots';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreRounded';
 import ExpandLessIcon from '@mui/icons-material/ExpandLessRounded';
 
-import jaCard from '../assets/voting_ja.png';
-import neinCard from '../assets/voting_nein.png';
+import jaCard from '../assets/voting_ja.webp';
+import neinCard from '../assets/voting_nein.webp';
 import './styles/Display.css';
 
 export default function Display() {
     const { roomId } = useParams();
     const [roomData, setRoomData] = useState({});
-    const [gameStarted, setGameStarted] = useState(false);
     const [voteResults, setVoteResults] = useState({ ja: 0, nein: 0 });
     const [voteCount, setVoteCount] = useState(0);
     const [playerCount, setPlayerCount] = useState(0);
@@ -118,11 +117,10 @@ export default function Display() {
         calculateResults();
     };
 
-    const fakePlayers = ['Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5', 'Player 6', 'Player 7', 'Player 8', 'Player 9', 'Player 10'];
-
     useEffect(() => {
         console.log("playerListExpanded state: ", playerListExpanded);
-      }, [playerListExpanded]);
+    }, [playerListExpanded]);
+
     return (
         <Container className='display-container'>
             {roomData && roomData.name ? (

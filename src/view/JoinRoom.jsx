@@ -5,11 +5,12 @@ import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import WaitingDots from '../components/WaitingDots';
 import './styles/JoinRoom.css';
 
-import CardYes from '../assets/voting_ja.png';
-import CardNo from '../assets/voting_nein.png';
 import { Collapse, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreRounded';
 import ExpandLessIcon from '@mui/icons-material/ExpandLessRounded';
+
+import jaCard from '../assets/voting_ja.webp';
+import neinCard from '../assets/voting_nein.webp';
 
 export default function JoinRoom() {
   const { roomId } = useParams();
@@ -19,6 +20,14 @@ export default function JoinRoom() {
   const [selectedVote, setSelectedVote] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [playerListExpanded, setPlayerListExpanded] = useState(false);
+  const [displayResults, setDisplayResults] = useState({
+    show: false,
+    results: {
+    },
+  });
+  const [voteResults, setVoteResults] = useState({ ja: 0, nein: 0 });
+  const [playerCount, setPlayerCount] = useState(0);
+  const [voteCount, setVoteCount] = useState(0);
 
   const submitVote = async () => {
     if (roomData.votingPhase.votes[playerName]) {
@@ -74,14 +83,40 @@ export default function JoinRoom() {
   }, [roomData, playerName]);
 
   useEffect(() => {
-    if (roomData && roomData.votingPhase.inProgress === true) {
-      setVotingPhase(true);
-    }
-    if (roomData && hasVoted()) {
-      setSelectedVote('done');
-      setVotingPhase(false);
+    if (roomData) {
+      const { votingPhase, players } = roomData;
+      if (votingPhase.inProgress === true) {
+        setVotingPhase(true);
+        setDisplayResults({ show: false, results: {} });
+        const votes = votingPhase.votes || {};
+        const voteCount = {
+          ja: Object.values(votes).filter(vote => vote === 'yes').length,
+          nein: Object.values(votes).filter(vote => vote === 'no').length,
+        };
+        const totalVotes = Object.keys(votes).length;
+        setVoteCount(totalVotes);
+        setVoteResults(voteCount);
+      }
+      if (players) {
+        setPlayerCount(players.length);
+      }
+      if (hasVoted()) {
+        setSelectedVote('done');
+        setVotingPhase(false);
+      }
+      if (votingPhase.inProgress === false) {
+        setSelectedVote(null);
+        setVotingPhase(false);
+      }
     }
   }, [roomData]);
+
+  useEffect(() => {
+    console.log('voteResults', voteResults);
+    if (voteCount === playerCount && voteCount !== 0) {
+      setDisplayResults({ show: true, results: voteResults });
+    }
+  }, [voteResults]);
 
   const handleVote = (vote) => {
     if (selectedVote === vote) {
@@ -95,13 +130,6 @@ export default function JoinRoom() {
     if (!selectedVote) return '';
     return selectedVote === cardType ? 'selected' : 'not-selected';
   };
-
-  useEffect(() => {
-    if (roomData && roomData.votingPhase?.inProgress === false) {
-      setSelectedVote(null);
-      setVotingPhase(false);
-    }
-  }, [roomData]);
 
   return (
     <div div="game-container">
@@ -122,7 +150,6 @@ export default function JoinRoom() {
             <div className='player-dropdown'>
               {roomData.players?.map((playerName, index) => (
                 <div className='item' key={index}>
-                  <button id='kick-player' onClick={() => kickPlayer(playerName)}>Expulser</button>
                   <p>{playerName}</p>
                 </div>
               ))}
@@ -138,13 +165,13 @@ export default function JoinRoom() {
                   className={`item vote-ja ${getCardClass('yes')}`}
                   onClick={() => handleVote('yes')}
                 >
-                  <img src={CardYes} alt='Ja' height={window.innerWidth < 600 ? 100 : 200} />
+                  <img src={jaCard} alt='Ja' height={window.innerWidth < 600 ? 100 : 200} />
                 </div>
                 <div
                   className={`item vote-no ${getCardClass('no')}`}
                   onClick={() => handleVote('no')}
                 >
-                  <img src={CardNo} alt='Nein' height={window.innerWidth < 600 ? 100 : 200} />
+                  <img src={neinCard} alt='Nein' height={window.innerWidth < 600 ? 100 : 200} />
                 </div>
               </div>
               <button className='submit-vote' onClick={submitVote}>Valider</button>
@@ -154,6 +181,21 @@ export default function JoinRoom() {
           {selectedVote === 'done' && (
             <div>
               <h2>Vous avez voté</h2>
+            </div>
+          )}
+          {displayResults.show && (
+            <div className='resultContainer'>
+              {displayResults.results.winner === 'ja' ? (
+                <div className='winnerCard'>
+                  <img src={jaCard} height={'200px'} alt='carte de vote ja' />
+                  <p style={{ fontSize: '32px' }}>Chancelier élu avec {displayResults.results.ja} voix</p>
+                </div>
+              ) : (
+                <div className='winnerCard'>
+                  <img src={neinCard} height={'200px'} alt='carte de vote nein' />
+                  <p style={{ fontSize: '32px' }}>Chancelier refusé avec {displayResults.results.nein} voix </p>
+                </div>
+              )}
             </div>
           )}
         </div>
