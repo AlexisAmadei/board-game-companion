@@ -6,14 +6,28 @@
     align-items: center;
 }
 
+.game-view {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#roomId {
+    font-family: monospace;
+}
+
 .display-players {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Divise en colonnes */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    /* Divise en colonnes */
     grid-auto-rows: auto;
     gap: 16px;
     justify-content: center;
     align-items: start;
 }
+
 .display-players .item {
     display: flex;
     flex-direction: row;
@@ -21,6 +35,7 @@
     align-items: center;
     font-size: 24px;
 }
+
 .display-players .item p {
     margin: 2px 0;
 }
@@ -70,4 +85,71 @@
 
 .winnerCard p {
     margin: auto;
+}
+
+div#page-title {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    margin-bottom: 32px;
+
+    h1 {
+        margin-bottom: 4px;
+    }
+
+    span {
+        font-size: 32px;
+    }
+}
+
+.desktop-restrict {
+    display: none;
+}
+
+.players-container {
+    display: flex;
+    flex-direction: row;
+}
+
+#expand-players {
+    box-shadow: none;
+    border: none;
+    color: white;
+}
+
+#expand-players:active {
+    top: 0;
+}
+
+.player-dropdown {
+    overflow: hidden;
+    transition: height 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 16px 16px;
+    align-items: flex-start;
+    border: 1px solid var(--tertiary);
+    border-radius: 8px;
+    background-color: var(--tertiary);
+}
+
+.player-dropdown .item {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+}
+
+.player-dropdown .item button#kick-player {
+    padding: 4px 8px;
+    margin: 0;
+    font-size: 16px;
+    box-shadow: none;
+}
+
+.player-dropdown .item p {
+    margin: 0;
 }

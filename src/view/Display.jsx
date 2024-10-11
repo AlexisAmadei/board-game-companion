@@ -1,9 +1,13 @@
-import { Container } from '@mui/material';
+import Collapse from '@mui/material/Collapse';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { db } from '../config/firebase';
 import { useParams } from 'react-router-dom';
 import WaitingDots from '../components/WaitingDots';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMoreRounded';
+import ExpandLessIcon from '@mui/icons-material/ExpandLessRounded';
 
 import jaCard from '../assets/voting_ja.png';
 import neinCard from '../assets/voting_nein.png';
@@ -22,6 +26,7 @@ export default function Display() {
         results: {
         },
     });
+    const [playerListExpanded, setPlayerListExpanded] = useState(false);
 
     useEffect(() => {
         const roomRef = doc(db, 'rooms', roomId);
@@ -35,7 +40,7 @@ export default function Display() {
 
     const startVotingPhase = async () => {
         if (playerCount < 5) {
-             setErrorMessage('5 joueur minimum pour commencer la phase de vote');
+            setErrorMessage('5 joueur minimum pour commencer la phase de vote');
             return;
         }
         const roomRef = doc(db, 'rooms', roomId);
@@ -111,13 +116,39 @@ export default function Display() {
         calculateResults();
     };
 
+    const fakePlayers = ['Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5', 'Player 6', 'Player 7', 'Player 8', 'Player 9', 'Player 10'];
+
+    useEffect(() => {
+        console.log("playerListExpanded state: ", playerListExpanded);
+      }, [playerListExpanded]);
     return (
         <Container className='display-container'>
             {roomData && roomData.name ? (
                 <div className='game-view'>
-                    <h1>{roomData.name} - {roomData.gameId}</h1>
-                    <p id='countPlayers'>{roomData.players?.length || 0} joueurs</p>
-                    <div className='display-players'>
+                    <div id='page-title'>
+                        <h1>{roomData.name}</h1>
+                        <span id='roomId'>{roomData.gameId}</span>
+                    </div>
+
+                    <div className='players-container'>
+                        <p id='countPlayers'>{roomData.players?.length || 0} joueurs</p>
+                        <IconButton id='expand-players' onClick={() => setPlayerListExpanded(prev => !prev)}>
+                            {playerListExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                        </IconButton>
+                    </div>
+                    <Collapse in={playerListExpanded} timeout="auto" unmountOnExit id='collapse'>
+                        <div className='player-dropdown'>
+                            {roomData.players?.map((playerName, index) => (
+                                <div className='item' key={index}>
+                                    <button id='kick-player' onClick={() => kickPlayer(playerName)}>Expulser</button>
+                                    <p>{playerName}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </Collapse>
+
+                    {/* Desktop Only */}
+                    <div className='display-players desktop-restrict'>
                         {roomData.players?.map((playerName, index) => (
                             <div className='item' key={index}>
                                 <button id='kick-player' onClick={() => kickPlayer(playerName)}>Expulser</button>
@@ -136,7 +167,7 @@ export default function Display() {
                         <div className='display-results'>
                             <h2 className='item'><img src={jaCard} height={'50px'} />Ja: {voteResults.ja}</h2>
                             <h2 className='item'><img src={neinCard} height={'50px'} />Nein: {voteResults.nein}</h2>
-                            <button onClick={endVotingPhase} >Terminer la phase de vote {voteCount}/{playerCount}</button>
+                            <button onClick={endVotingPhase}>Terminer la phase de vote {voteCount}/{playerCount}</button>
                         </div>
                     )}
                     {displayResults.show && (

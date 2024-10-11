@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import './styles/Host.css';
 import ErrorMessage from '../components/ErrorMessage';
 import fetchCollection from '../utils/fetchCollection';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 
 const Host = () => {
     const [gameName, setGameName] = useState('');
@@ -81,8 +84,11 @@ const Host = () => {
     };
 
     return (
-        <div style={{ padding: '20px' }}>
-            <h1>Créer une partie</h1>
+        <div style={{ padding: '20px' }} className='host-wrapper'>
+            <IconButton id='backHome' onClick={() => navigate('/')} >
+                <HomeRoundedIcon />
+            </IconButton>
+            <h1 id='page-title'>Créer une partie</h1>
             <input
                 type="text"
                 placeholder="Nom de la partie"

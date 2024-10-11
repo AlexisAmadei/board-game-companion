@@ -1,3 +1,19 @@
+@media screen and (max-width: 768px) {
+    #backHome {
+        position: absolute;
+        right: 24px;
+        top: 24px;
+        background-color: var(--secondary);
+        color: white;
+    }
+}
+
+#backHome {
+    background-color: var(--secondary);
+    color: white;
+    transition: all 0.2s;
+}
+
 input {
     border: 2px solid #0000;
     border-radius: 5px;
@@ -8,4 +24,9 @@ input {
     outline: none;
     padding: 5px;
     width: 40vmin;
+}
+
+
+h1#page-title {
+    margin-top: 42px;
 }

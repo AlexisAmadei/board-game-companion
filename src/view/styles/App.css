@@ -1,3 +1,13 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0 1em;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
 .app-wrapper {
   background-color: var(--primary);
   color: var(--text);
@@ -6,22 +16,6 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-}
-
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  padding: 0 1em;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.app-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 8px;
 }
 
@@ -48,7 +42,6 @@
   border-radius: 8px;
   width: 300px;
   background-color: var(--tertiary);
-
 }
 
 .input-field {
@@ -70,16 +63,31 @@ footer {
   display: flex;
   flex-direction: row;
   gap: 8px;
-  margin-top: 20px;
   position: absolute;
-  bottom: 0;
+  bottom: 8px;
   align-items: center;
 }
-
 footer a {
   color: var(--text);
   text-decoration: none;
 }
 footer a:hover {
   color: var(--secondary);
+}
+
+@media screen and (max-width: 768px) {
+  #root {
+    padding: 0 0.5em;
+    padding: 8px;
+  }
+  .actions-button {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .actions-button button {
+    font-size: 32px;
+  }
+  
 }
