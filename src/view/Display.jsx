@@ -12,6 +12,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLessRounded';
 import jaCard from '../assets/voting_ja.webp';
 import neinCard from '../assets/voting_nein.webp';
 import './styles/Display.css';
+import VoteResult from '../components/VoteResult/VoteResult';
 
 export default function Display() {
     const { roomId } = useParams();
@@ -178,25 +179,7 @@ export default function Display() {
                     ) : (
                         <button onClick={endVotingPhase}>Terminer la phase de vote {voteCount}/{playerCount}</button>
                     )}
-                    {displayResults.show && (
-                        <div className='resultContainer'>
-                            {displayResults.results.winner === 'ja' ? (
-                                <div className='winnerCard'>
-                                    <img src={jaCard} height={'200px'} alt='carte de vote ja' />
-                                    <p style={{ fontSize: '32px' }}>Chancelier élu avec {displayResults.results.ja} voix</p>
-                                </div>
-                            ) : displayResults.results.winner === 'nein' ? (
-                                <div className='winnerCard'>
-                                    <img src={neinCard} height={'200px'} alt='carte de vote nein' />
-                                    <p style={{ fontSize: '32px' }}>Chancelier refusé avec {displayResults.results.nein} voix </p>
-                                </div>
-                            ) : displayResults.results.winner === 'tie' ? (
-                                <div className='winnerCard'>
-                                    <p style={{ fontSize: '32px' }}>Égalité avec {displayResults.results.ja} voix pour Ja et {displayResults.results.nein} voix pour Nein</p>
-                                </div>
-                            ) : null}
-                        </div>
-                    )}
+                    <VoteResult displayResults={displayResults} />
                 </div>
             ) : (
                 <div className='waiting-data'>

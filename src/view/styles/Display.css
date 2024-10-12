@@ -140,37 +140,6 @@
     margin: auto;
 }
 
-.resultContainer {
-    margin-top: 16px;
-}
-
-.winnerCard {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    gap: 8px;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-}
-
-.winnerCard p {
-    margin: auto;
-}
-
-.winnerCard img {
-    border-radius: 8px;
-    width: 100%;
-    height: 250px;
-}
-
 div#page-title {
     display: -webkit-box;
     display: -ms-flexbox;

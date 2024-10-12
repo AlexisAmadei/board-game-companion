@@ -13,17 +13,36 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  --background: #e3644b;
+  --secondary: #383733;
+  --tertiary: #5E584A;
+  --text: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --background: #e3644b;
-  --secondary: #383733;
-  --tertiary: #5E584A;
-  --text: #ffffff;
-  background-color: var(--background);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow: hidden;
+  background-color: var(--background) !important;
+  color: white !important;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
 }
 
 html,
@@ -40,29 +59,10 @@ body,
   flex-direction: column;
 }
 
-body {
-  margin: 0;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  min-width: 320px;
-  min-height: 100vh;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
 a {
   font-weight: 500;
   color: #646cff;
-  text-decoration: inherit;
+  text-decoration: none;
 }
 
 a:hover {
@@ -78,20 +78,20 @@ button {
   -webkit-box-shadow: rgb(180, 67, 26) 0px 5px 0px 0px;
   box-shadow: rgb(180, 67, 26) 0px 5px 0px 0px;
   border-radius: 10px;
-  border: 2px solid #00000000;
+  border: 2px solid transparent;
   padding: 10px 25px;
   font-family: 'Germania One', cursive;
   font-size: calc(6px + 4vmin);
   text-align: center;
-  color: white;
+  color: var(--text);
   background-color: var(--tertiary);
-  position: relative;
-  -webkit-transition: all .12s ease-in-out 0s, visibility 0s;
-  -o-transition: all .12s ease-in-out 0s, visibility 0s;
-  transition: all .12s ease-in-out 0s, visibility 0s;
-  top: 0;
   cursor: pointer;
   margin: 2px 8px;
+  position: relative;
+  top: 0;
+  -webkit-transition: all 0.12s ease-in-out;
+  -o-transition: all 0.12s ease-in-out;
+  transition: all 0.12s ease-in-out;
 }
 
 button:active {
@@ -100,11 +100,4 @@ button:active {
 
 button:hover {
   background-color: var(--secondary);
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
 }
