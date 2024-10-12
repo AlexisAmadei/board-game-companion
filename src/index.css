@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
 @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 
 :root {
@@ -19,17 +26,31 @@
   background-color: var(--background);
 }
 
-html, body, #root {
+html,
+body,
+#root {
   width: 100%;
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
 }
 
 body {
   margin: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
   justify-content: flex-start;
   min-width: 320px;
   min-height: 100vh;
@@ -54,6 +75,7 @@ h1 {
 }
 
 button {
+  -webkit-box-shadow: rgb(180, 67, 26) 0px 5px 0px 0px;
   box-shadow: rgb(180, 67, 26) 0px 5px 0px 0px;
   border-radius: 10px;
   border: 2px solid #00000000;
@@ -64,6 +86,8 @@ button {
   color: white;
   background-color: var(--tertiary);
   position: relative;
+  -webkit-transition: all .12s ease-in-out 0s, visibility 0s;
+  -o-transition: all .12s ease-in-out 0s, visibility 0s;
   transition: all .12s ease-in-out 0s, visibility 0s;
   top: 0;
   cursor: pointer;

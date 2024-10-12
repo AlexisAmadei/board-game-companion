@@ -11,6 +11,8 @@
 #backHome {
     background-color: var(--secondary);
     color: white;
+    -webkit-transition: all 0.2s;
+    -o-transition: all 0.2s;
     transition: all 0.2s;
 }
 

@@ -1,45 +1,95 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
 .game-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
     justify-content: flex-start;
     max-height: 100%;
 }
 
 .game-view {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
 }
 
 .votingPhase {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
     gap: 8px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
     max-width: 600px;
+    -ms-flex-pack: distribute;
     justify-content: space-around;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 
 .voting-cards {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
     flex-direction: row;
     gap: 16px;
     width: 100%;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
     justify-content: space-between;
 }
 
 .item {
+    -webkit-transition: opacity 0.5s ease, -webkit-transform 0.2s ease;
+    transition: opacity 0.5s ease, -webkit-transform 0.2s ease;
+    -o-transition: transform 0.2s ease, opacity 0.5s ease;
     transition: transform 0.2s ease, opacity 0.5s ease;
+    transition: transform 0.2s ease, opacity 0.5s ease, -webkit-transform 0.2s ease;
 }
 
 .selected {
+    -webkit-transform: scale(1.08);
+    -ms-transform: scale(1.08);
     transform: scale(1.08);
 }
 
 .not-selected {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
     transform: scale(1);
     opacity: .8;
 }
@@ -49,12 +99,22 @@
 }
 
 .game-view .display-players {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
     flex-direction: row;
     gap: 16px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
     margin: 16px 0;
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
 }
 
