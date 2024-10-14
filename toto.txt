@@ -1,2 +1,1 @@
-responsive
-police sur le id
+- Input firefox avec label en blanc
