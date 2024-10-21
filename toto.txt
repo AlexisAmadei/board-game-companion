@@ -1,1 +1,1 @@
-- Input firefox avec label en blanc
+- Manage dark and light theme
