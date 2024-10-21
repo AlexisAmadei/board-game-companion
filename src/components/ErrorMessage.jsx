@@ -1,6 +1,12 @@
 import React, { useEffect } from 'react'
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function ErrorMessage({ message, setErrorMessage }) {
+    const { theme } = useTheme();
+    const messageStyle = {
+        color: theme === 'light' ? 'white' : 'var(--primary)',
+    };
+
     useEffect(() => {
         if (message) {
             setTimeout(() => {
@@ -9,7 +15,7 @@ export default function ErrorMessage({ message, setErrorMessage }) {
         }
     }, [message]);
     return (
-        <div style={{ padding: '10px' }}>
+        <div style={messageStyle}>
             {message}
         </div>
     )

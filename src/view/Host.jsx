@@ -5,8 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import './styles/Host.css';
 import ErrorMessage from '../components/ErrorMessage';
 import fetchCollection from '../utils/fetchCollection';
-import IconButton from '@mui/material/IconButton';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import ThemedButton from '../Theme/Button/ThemedButton';
 
 const Host = () => {
     const [gameName, setGameName] = useState('');
@@ -68,7 +67,6 @@ const Host = () => {
                 },
                 players: []
             });
-
             navigate(`/display/${roomId}`);
         } catch (error) {
             console.error('Erreur lors de la création de la partie: ', error);
@@ -83,23 +81,19 @@ const Host = () => {
     };
 
     return (
-        <div style={{ padding: '20px' }} className='host-wrapper'>
-            <IconButton id='backHome' onClick={() => navigate('/')} >
-                <HomeRoundedIcon />
-            </IconButton>
+        <div className='host-wrapper'>
             <h1 id='page-title'>Créer une partie</h1>
-            <input
-                type="text"
-                placeholder="Nom de la partie"
-                value={gameName}
-                onChange={(e) => setGameName(e.target.value)}
-                style={{ padding: '10px', marginRight: '10px' }}
-                onKeyDown={handleKeyDown}
-            />
-            <button onClick={createGame} style={{ padding: '10px 20px' }}>
-                Créer
-            </button>
-            <ErrorMessage message={errorMessage} setErrorMessage={setErrorMessage} />
+            <div id='content'>
+                <input
+                    type="text"
+                    placeholder="Nom de la partie"
+                    value={gameName}
+                    onChange={(e) => setGameName(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                />
+                <ThemedButton text={'Créer'} onClick={createGame} />
+                <ErrorMessage message={errorMessage} setErrorMessage={setErrorMessage} />
+            </div>
         </div>
     );
 };

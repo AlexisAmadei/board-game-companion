@@ -1,0 +1,44 @@
+.button-light {
+    box-shadow: rgb(180, 67, 26) 0px 5px 0px 0px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    padding: 10px 25px;
+    font-family: 'Germania One', cursive;
+    font-size: calc(6px + 4vmin);
+    text-align: center;
+    color: var(--text);
+    background-color: var(--tertiary);
+    cursor: pointer;
+    margin: 2px 8px;
+    position: relative;
+    top: 0;
+    transition: all 0.12s ease-in-out;
+}
+.button-light:active {
+    top: 5px;
+}
+.button-light:hover {
+    background-color: var(--secondary);
+}
+
+.button-dark {
+    border: 2px solid var(--primary);
+    background-color: #35332f;
+    border-radius: 10px;
+    padding: 10px 25px;
+    font-family: 'Germania One', cursive;
+    font-size: calc(6px + 4vmin);
+    text-align: center;
+    color: var(--text);
+    cursor: pointer;
+    margin: 2px 8px;
+    position: relative;
+    top: 0;
+    transition: all 0.12s ease-in-out;
+}
+.button-dark:active {
+    top: 5px;
+}
+.button-dark:hover {
+    background-color: var(--secondary);
+}

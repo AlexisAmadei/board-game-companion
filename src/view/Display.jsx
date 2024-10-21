@@ -13,6 +13,7 @@ import jaCard from '../assets/voting_ja.webp';
 import neinCard from '../assets/voting_nein.webp';
 import './styles/Display.css';
 import VoteResult from '../components/VoteResult/VoteResult';
+import ThemedButton from '../Theme/Button/ThemedButton';
 
 export default function Display() {
     const { roomId } = useParams();
@@ -145,15 +146,21 @@ export default function Display() {
 
                     <div className='players-container mobile-restrict'>
                         <p id='countPlayers'>{roomData.players?.length || 0} joueurs</p>
-                        <IconButton id='expand-players' onClick={() => setPlayerListExpanded(prev => !prev)}>
-                            {playerListExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                        </IconButton>
+                        {roomData.players?.length > 0 && (
+                            <IconButton id='expand-players' onClick={() => setPlayerListExpanded(prev => !prev)}>
+                                {playerListExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                            </IconButton>
+                        )}
                     </div>
                     <Collapse in={playerListExpanded} timeout="auto" unmountOnExit id='collapse'>
                         <div className='player-dropdown'>
                             {roomData.players?.map((playerName, index) => (
                                 <div className='item' key={index}>
-                                    <button id='kick-player' onClick={() => kickPlayer(playerName)}>Expulser</button>
+                                    <ThemedButton
+                                        text={playerName}
+                                        onClick={() => kickPlayer(playerName)}
+                                        id='kick-player'
+                                    />
                                     <p>{playerName}</p>
                                 </div>
                             ))}
@@ -164,7 +171,11 @@ export default function Display() {
                     <div className='display-players desktop-restrict'>
                         {roomData.players?.map((playerName, index) => (
                             <div className='item' key={index}>
-                                <button id='kick-player' onClick={() => kickPlayer(playerName)}>Expulser</button>
+                                <ThemedButton
+                                    text={playerName}
+                                    onClick={() => kickPlayer(playerName)}
+                                    id='kick-player'
+                                />
                                 <p>{playerName}</p>
                             </div>
                         ))}
@@ -173,11 +184,11 @@ export default function Display() {
                     {roomData.votingPhase?.inProgress && <WaitingDots text='Phase de vote en cours' />}
                     {!roomData.votingPhase?.inProgress ? (
                         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
-                            <button onClick={startVotingPhase}>Commencer une phase de vote</button>
+                            <ThemedButton text='Commencer la phase de vote' onClick={startVotingPhase} />
                             <span>{errorMessage && <span className='error-message'>{errorMessage}</span>}</span>
                         </div>
                     ) : (
-                        <button onClick={endVotingPhase}>Terminer la phase de vote {voteCount}/{playerCount}</button>
+                        <ThemedButton text='Arrêter la phase de vote' onClick={endVotingPhase} />
                     )}
                     <VoteResult displayResults={displayResults} />
                 </div>

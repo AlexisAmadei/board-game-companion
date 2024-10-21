@@ -1,25 +1,15 @@
-@media screen and (max-width: 768px) {
-    #backHome {
-        position: absolute;
-        right: 24px;
-        top: 24px;
-        background-color: var(--secondary);
-        color: white;
-    }
-}
-
-#backHome {
-    background-color: var(--secondary);
-    color: white;
-    -webkit-transition: all 0.2s;
-    -o-transition: all 0.2s;
-    transition: all 0.2s;
+.host-wrapper {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
 }
 
 input {
     border: 2px solid #0000;
     border-radius: 5px;
-    color: var(--textColorOnWhite);
+    color: var(--secondary);
     font-family: var(--textFont);
     font-size: calc(4px + 3vmin);
     min-width: 20px;
@@ -28,7 +18,11 @@ input {
     width: 40vmin;
 }
 
+#content {
+    height: 48px;
+}
 
 h1#page-title {
     margin-top: 42px;
+    text-align: center;
 }

@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import { Box, Button, Modal, Typography } from '@mui/material';
+import { Box, Modal } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, updateDoc, query, where } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import './styles/App.css';
 import logo from '../assets/kiwiDevLogo-transparent.png';
+import SwitchTheme from '../components/SwitchTheme/SwitchTheme';
+import ThemedButton from '../Theme/Button/ThemedButton';
+import ErrorMessage from '../components/ErrorMessage';
 
 export default function App() {
   const navigate = useNavigate();
@@ -61,12 +64,14 @@ export default function App() {
     <div className='app-wrapper'>
       <img src='https://www.ultraboardgames.com/secret-hitler/gfx/secret-hitler-banner.jpg' alt='Secret' width={'100%'} />
       <Box className='actions-button'>
-        <button onClick={handleHostGame}>
-          Créer
-        </button>
-        <button onClick={enterRoomId}>
-          Rejoindre
-        </button>
+        <ThemedButton
+          text={'Créer'}
+          onClick={handleHostGame}
+        />
+        <ThemedButton
+          text={'Rejoindre'}
+          onClick={enterRoomId}
+        />
       </Box>
       <footer>
         <a href='https://alexisamadei.fr/' target='_blank' >by Kiwi Dev</a>
@@ -88,10 +93,12 @@ export default function App() {
             onChange={(event) => setPlayerName(event.target.value)}
             className='input-field'
           />
-          <button type='submit' onClick={handleJoinRoom} className='join-button'>
-            Rejoindre
-          </button>
-          {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+          <ThemedButton
+            text={'Rejoindre'}
+            onClick={handleJoinRoom}
+            classes={'join-button'}
+          />
+          {errorMessage && <ErrorMessage message={errorMessage} setErrorMessage={setErrorMessage} />}
         </Box>
       </Modal>
     </div>

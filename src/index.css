@@ -1,10 +1,3 @@
-/*
-* Prefixed by https://autoprefixer.github.io
-* PostCSS: v8.4.14,
-* Autoprefixer: v10.4.7
-* Browsers: last 4 version
-*/
-
 @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
 
 :root {
@@ -12,11 +5,14 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  color-scheme: only light;
   --background: #e3644b;
+  --primary: #e3644b;
   --secondary: #383733;
   --tertiary: #5E584A;
   --text: #ffffff;
+
+  --dark-tertiary: #383733;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -29,8 +25,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow: hidden;
-  background-color: var(--background) !important;
-  color: white !important;
+  color: white;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -43,6 +38,12 @@ body {
   justify-content: flex-start;
   width: 100%;
   height: 100%;
+}
+body.light {
+  background-color: var(--background);
+}
+body.dark {
+  background-color: var(--dark-tertiary);
 }
 
 html,
@@ -74,30 +75,14 @@ h1 {
   line-height: 1.1;
 }
 
-button {
-  -webkit-box-shadow: rgb(180, 67, 26) 0px 5px 0px 0px;
-  box-shadow: rgb(180, 67, 26) 0px 5px 0px 0px;
-  border-radius: 10px;
-  border: 2px solid transparent;
-  padding: 10px 25px;
-  font-family: 'Germania One', cursive;
-  font-size: calc(6px + 4vmin);
-  text-align: center;
-  color: var(--text);
-  background-color: var(--tertiary);
-  cursor: pointer;
-  margin: 2px 8px;
-  position: relative;
-  top: 0;
-  -webkit-transition: all 0.12s ease-in-out;
-  -o-transition: all 0.12s ease-in-out;
-  transition: all 0.12s ease-in-out;
-}
-
-button:active {
-  top: 5px;
-}
-
-button:hover {
-  background-color: var(--secondary);
+.default-layout {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 }

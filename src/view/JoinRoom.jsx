@@ -11,6 +11,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLessRounded';
 
 import jaCard from '../assets/voting_ja.webp';
 import neinCard from '../assets/voting_nein.webp';
+import ThemedButton from '../Theme/Button/ThemedButton';
 
 export default function JoinRoom() {
   const { roomId } = useParams();
@@ -174,7 +175,7 @@ export default function JoinRoom() {
                   <img src={neinCard} alt='Nein' height={window.innerWidth < 600 ? 100 : 200} />
                 </div>
               </div>
-              <button className='submit-vote' onClick={submitVote}>Valider</button>
+              <ThemedButton text={'Voter !'} onClick={submitVote} classes={'submit-vote'} />
               {errorMessage && <p>{errorMessage}</p>}
             </div>
           ) : null}

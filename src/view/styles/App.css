@@ -19,7 +19,6 @@
 }
 
 .app-wrapper {
-  background-color: var(--primary);
   color: var(--text);
   display: -webkit-box;
   display: -ms-flexbox;
@@ -44,7 +43,6 @@
   display: flex;
 }
 
-/* Modal classes*/
 .join-modal {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -84,6 +82,7 @@
   margin: 10px 0;
   padding: 8px;
   width: 100%;
+  color: var(--tertiary);
 }
 
 .join-button {
@@ -91,7 +90,6 @@
   color: white;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
   background-color: var(--background);
 }
 
