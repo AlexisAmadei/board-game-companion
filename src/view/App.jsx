@@ -1,13 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import { Box, Modal } from '@mui/material';
+import { Box, IconButton, Modal } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, updateDoc, query, where } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import './styles/App.css';
 import logo from '../assets/kiwiDevLogo-transparent.png';
-import SwitchTheme from '../components/SwitchTheme/SwitchTheme';
 import ThemedButton from '../Theme/Button/ThemedButton';
 import ErrorMessage from '../components/ErrorMessage';
+import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import Banner from '../assets/banner.png';
+import './styles/App.css';
 
 export default function App() {
   const navigate = useNavigate();
@@ -60,9 +61,14 @@ export default function App() {
     setIsModalRoomIdOpen(true);
   }, []);
 
+  const handleMailto = () => {
+    window.open('mailto:kiwi.dev2024@gmail.com');
+  };
+
   return (
     <div className='app-wrapper'>
-      <img src='https://www.ultraboardgames.com/secret-hitler/gfx/secret-hitler-banner.jpg' alt='Secret' width={'100%'} />
+      {/* <img src='https://www.ultraboardgames.com/secret-hitler/gfx/secret-hitler-banner.jpg' alt='Secret' /> */}
+      <img id='banner' src={Banner} alt='Secret H Banner' />
       <Box className='actions-button'>
         <ThemedButton
           text={'Créer'}
@@ -76,6 +82,9 @@ export default function App() {
       <footer>
         <a href='https://alexisamadei.fr/' target='_blank' >by Kiwi Dev</a>
         <img src={logo}  alt='Kiwi Dev logo' width={'30px'} height={'30px'} />
+        <IconButton id='mailto' color='inherit' onClick={handleMailto} >
+          <EmailRoundedIcon color='inherit' />
+        </IconButton>
       </footer>
       <Modal open={isModalRoomIdOpen} onClose={() => setIsModalRoomIdOpen(false)} className='join-modal'>
         <Box className='modal-content'>

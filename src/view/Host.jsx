@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { db } from '../config/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
-import './styles/Host.css';
 import ErrorMessage from '../components/ErrorMessage';
 import fetchCollection from '../utils/fetchCollection';
 import ThemedButton from '../Theme/Button/ThemedButton';
+import './styles/Host.css';
 
 const Host = () => {
     const [gameName, setGameName] = useState('');
@@ -41,8 +41,12 @@ const Host = () => {
     }, [rooms]);
 
     function validerNomDeSalle(nom) {
-        const regex = /^[A-HJ-NP-Za-hj-np-z\s]+$/;
-        return regex.test(nom);
+        const regex = /^[A-Za-z\s]+$/;
+        console.log(nom);
+        if (regex.test(nom)) {
+            return true;
+        }
+        return (false);
     }
 
     const createGame = async () => {
@@ -92,6 +96,8 @@ const Host = () => {
                     onKeyDown={handleKeyDown}
                 />
                 <ThemedButton text={'Créer'} onClick={createGame} />
+            </div>
+            <div id='error-message'>
                 <ErrorMessage message={errorMessage} setErrorMessage={setErrorMessage} />
             </div>
         </div>

@@ -1,19 +1,16 @@
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { db } from '../config/firebase';
 import Collapse from '@mui/material/Collapse';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
-import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { db } from '../config/firebase';
-import { useParams } from 'react-router-dom';
 import WaitingDots from '../components/WaitingDots';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreRounded';
 import ExpandLessIcon from '@mui/icons-material/ExpandLessRounded';
-
-import jaCard from '../assets/voting_ja.webp';
-import neinCard from '../assets/voting_nein.webp';
-import './styles/Display.css';
 import VoteResult from '../components/VoteResult/VoteResult';
 import ThemedButton from '../Theme/Button/ThemedButton';
+import './styles/Display.css';
 
 export default function Display() {
     const { roomId } = useParams();
@@ -22,12 +19,12 @@ export default function Display() {
     const [voteCount, setVoteCount] = useState(0);
     const [playerCount, setPlayerCount] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
+    const [playerListExpanded, setPlayerListExpanded] = useState(false);
     const [displayResults, setDisplayResults] = useState({
         show: false,
         results: {
         },
     });
-    const [playerListExpanded, setPlayerListExpanded] = useState(false);
 
     useEffect(() => {
         const roomRef = doc(db, 'rooms', roomId);
@@ -40,11 +37,6 @@ export default function Display() {
     }, [roomId]);
 
     const startVotingPhase = async () => {
-        // Player limit
-        // if (playerCount < 5) {
-        //     setErrorMessage('5 joueur minimum pour commencer la phase de vote');
-        //     return;
-        // }
         setDisplayResults({ show: false, results: {} });
         const roomRef = doc(db, 'rooms', roomId);
         await updateDoc(roomRef, {

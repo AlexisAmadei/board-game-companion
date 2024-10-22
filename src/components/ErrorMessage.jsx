@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTheme } from '../contexts/ThemeContext';
 
 export default function ErrorMessage({ message, setErrorMessage }) {

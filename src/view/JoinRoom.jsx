@@ -3,15 +3,13 @@ import { useParams } from 'react-router-dom';
 import { db } from '../config/firebase';
 import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import WaitingDots from '../components/WaitingDots';
-import './styles/JoinRoom.css';
-
 import { Collapse, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreRounded';
 import ExpandLessIcon from '@mui/icons-material/ExpandLessRounded';
-
 import jaCard from '../assets/voting_ja.webp';
 import neinCard from '../assets/voting_nein.webp';
 import ThemedButton from '../Theme/Button/ThemedButton';
+import './styles/JoinRoom.css';
 
 export default function JoinRoom() {
   const { roomId } = useParams();

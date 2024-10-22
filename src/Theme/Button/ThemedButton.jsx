@@ -1,5 +1,6 @@
 import { useTheme } from "../../contexts/ThemeContext";
 import './ThemedButton.css';
+
 export default function ThemedButton({ text, onClick, classes, id }) {
   const { theme } = useTheme();
   return (

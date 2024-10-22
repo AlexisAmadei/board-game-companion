@@ -37,6 +37,11 @@
   gap: 8px;
 }
 
+.app-wrapper img#banner {
+  width: 50%;
+  border-radius: 16px;
+}
+
 .actions-buttons {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -111,9 +116,29 @@ footer {
 footer a {
   color: var(--text);
   text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 2px 4px;
+  transition: all 0.2s ease-in-out;
 }
 footer a:hover {
-  color: var(--secondary);
+  background-color: var(--tertiary);
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+}
+
+#mailto {
+  color: var(--text);
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 2px 4px;
+  transition: all 0.2s ease-in-out;
+}
+#mailto:hover {
+  background-color: var(--tertiary);
+  border: 2px solid var(--primary);
+  border-radius: 8px;
 }
 
 @media screen and (max-width: 768px) {
@@ -134,5 +159,8 @@ footer a:hover {
   }
   .actions-button button {
     font-size: 32px;
+  }
+  .app-wrapper img#banner {
+    width: 100%;
   }
 }

@@ -1,7 +1,7 @@
-import './VoteResult.css';
 import jaCard from '../../assets/voting_ja.webp';
 import neinCard from '../../assets/voting_nein.webp';
 import PropTypes from 'prop-types';
+import './VoteResult.css';
 
 function VoteResult({ displayResults }) {
     if (displayResults.show === false) {

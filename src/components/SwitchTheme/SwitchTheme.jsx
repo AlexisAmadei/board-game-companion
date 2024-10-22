@@ -4,6 +4,7 @@ import DarkModeIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeIcon from '@mui/icons-material/LightModeRounded';
 import IconButton from '@mui/material/IconButton';
 import './SwitchTheme.css';
+
 export default function SwitchTheme() {
   const { theme, toggleTheme } = useTheme();
   useEffect(() => {

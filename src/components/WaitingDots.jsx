@@ -1,33 +1,26 @@
-import React from "react";
-
-export default function LoadingDots(props) {
+ export default function LoadingDots({ text }) {
   const containerStyle = {
     fontSize: "24px",
     fontWeight: "bold",
     display: "flex",
     alignItems: "center"
   };
-
   const dotsContainerStyle = {
     display: "flex",
     marginLeft: "10px"
   };
-
   const dotStyle = {
     fontSize: "24px",
     animation: "blink 1.5s infinite",
   };
-
   const dot2Style = {
     ...dotStyle,
     animationDelay: "0.3s",
   };
-
   const dot3Style = {
     ...dotStyle,
     animationDelay: "0.6s",
   };
-
   const blinkAnimation = `
     @keyframes blink {
       0% { opacity: 0; }
@@ -35,9 +28,6 @@ export default function LoadingDots(props) {
       100% { opacity: 0; }
     }
   `;
-
-  const { text } = props;
-
   return (
     <div>
       <style>{blinkAnimation}</style>

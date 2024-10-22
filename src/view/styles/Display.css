@@ -249,3 +249,14 @@ div#page-title {
 .player-dropdown .item p {
     margin: 0;
 }
+
+.waiting-data {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    text-wrap: nowrap;
+}

@@ -1,5 +1,5 @@
 .host-wrapper {
-    padding: 20px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -30,4 +30,8 @@ input {
 h1#page-title {
     margin-top: 42px;
     text-align: center;
+}
+
+#error-message {
+    margin-top: 16px;
 }
