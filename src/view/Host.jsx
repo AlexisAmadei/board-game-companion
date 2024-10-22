@@ -42,7 +42,6 @@ const Host = () => {
 
     function validerNomDeSalle(nom) {
         const regex = /^[A-Za-z\s]+$/;
-        console.log(nom);
         if (regex.test(nom)) {
             return true;
         }

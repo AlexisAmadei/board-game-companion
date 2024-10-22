@@ -7,9 +7,6 @@ import './SwitchTheme.css';
 
 export default function SwitchTheme() {
   const { theme, toggleTheme } = useTheme();
-  useEffect(() => {
-    console.log('theme:', theme);
-  }, [theme]);
   return (
     <div className="switch-theme">
       <IconButton

@@ -123,10 +123,6 @@ export default function Display() {
         calculateResults();
     };
 
-    useEffect(() => {
-        console.log("playerListExpanded state: ", playerListExpanded);
-    }, [playerListExpanded]);
-
     return (
         <Container className='display-container'>
             {roomData && roomData.name ? (
