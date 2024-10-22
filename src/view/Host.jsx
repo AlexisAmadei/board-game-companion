@@ -4,6 +4,7 @@ import { db } from '../config/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import ErrorMessage from '../components/ErrorMessage';
 import fetchCollection from '../utils/fetchCollection';
+import cleanOldRooms from '../utils/cleanOldRooms';
 import ThemedButton from '../Theme/Button/ThemedButton';
 import './styles/Host.css';
 
@@ -38,6 +39,7 @@ const Host = () => {
         if (rooms.length > 0) {
             createRoomId();
         }
+        cleanOldRooms(rooms);
     }, [rooms]);
 
     function validerNomDeSalle(nom) {
