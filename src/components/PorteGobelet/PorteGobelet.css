@@ -1,0 +1,59 @@
+.porte-gobelet-container {
+    position: fixed;
+    bottom: 48px;
+    right: 0px;
+    display: flex;
+    border-radius: 12px 0 0 12px;
+    padding: 12px 12px;
+    align-items: center;
+}
+
+.porte-gobelet-container:hover {
+    cursor: pointer;
+}
+
+.porte-gobelet-container.light {
+    background-color: var(--tertiary);
+}
+
+.porte-gobelet-container.dark {
+    background-color: var(--primary);
+}
+
+.coffee-collapse {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    text-wrap: nowrap;
+    text-align: right;
+    padding-left: 12px;
+}
+.coffee-collapse p {
+    margin: 0;
+    font-size: 16px;
+    color: var(--text);
+}
+
+.coffee-button {
+    text-align: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: transparent;
+    color: white;
+    transition: all 0.1s;
+}
+
+.coffee-button.light:hover {
+    background-color: var(--primary);
+}
+.coffee-button.light {
+    border: 2px solid var(--primary);
+}
+
+.coffee-button.dark:hover {
+    background-color: var(--secondary);
+}
+.coffee-button.dark {
+    border: 2px solid var(--secondary);
+}
