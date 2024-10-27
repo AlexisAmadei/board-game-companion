@@ -9,7 +9,6 @@ export default function PorteGobelet() {
     const { theme } = useTheme();
     const [isCoffeeClicked, setIsCoffeeClicked] = useState(false);
 
-
     const coffeeButton = () => {
         window.open('https://buymeacoffee.com/kiwidev2026', '_blank');
     }

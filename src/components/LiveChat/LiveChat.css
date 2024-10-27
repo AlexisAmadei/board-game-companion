@@ -1,0 +1,107 @@
+.messages-container {
+    position: fixed;
+    bottom: 72px;
+    right: 0px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 12px 0 0 12px;
+    padding: 12px 12px;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+    overflow: hidden;
+    max-width: 75%;
+    #expand-messages {
+        position: relative;
+        top: 0;
+    }
+}
+.messages-container:hover {
+    cursor: pointer;
+}
+.messages-container.light {
+    border: 2px solid var(--primary);
+    border-right-color: var(--tertiary);
+    background-color: var(--tertiary);
+}
+.messages-container.dark {
+    background-color: var(--secondary);
+    border: 2px solid var(--primary);
+    border-right-color: var(--secondary);
+}
+
+.messages-container#expand-messages {
+    position: relative;
+    top: 0;
+}
+
+.messages-drawer-container {
+    padding: 4px 12px;
+}
+#messages-drawer-header p {
+    margin: 2px 0;
+    font-size: 18px;
+    text-decoration: underline;
+}
+
+.message-input {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    gap: 4px;
+}
+
+.messages-list {
+    overflow: scroll;
+    height: 250px;
+    p {
+        margin: 8px;
+    }
+}
+
+.message {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    gap: 4px;
+    #username {
+        font-weight: bold;
+    }
+    #content {
+        font-size: 16px;
+        text-wrap: wrap;
+        overflow: hidden;
+        font-weight: normal;
+    }
+    p {
+        margin: 0;
+    }
+}
+
+.send-message {
+    border-radius: 4px;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+    font-family: var(--text);
+    font-size: 16px;
+}
+.send-message.light {
+    background-color: var(--tertiary);
+    color: white;
+    border: 2px solid var(--primary);
+}
+.send-message.dark {
+    border: 2px solid transparent;
+    background-color: var(--tertiary);
+    color: white;
+}

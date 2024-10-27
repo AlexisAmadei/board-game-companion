@@ -2,14 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../config/firebase';
 import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
-import WaitingDots from '../components/WaitingDots';
+
 import { Collapse, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreRounded';
 import ExpandLessIcon from '@mui/icons-material/ExpandLessRounded';
+
 import jaCard from '../assets/voting_ja.webp';
 import neinCard from '../assets/voting_nein.webp';
+import WaitingDots from '../components/WaitingDots';
 import ThemedButton from '../Theme/Button/ThemedButton';
+import { useTheme } from '../contexts/ThemeContext';
 import './styles/JoinRoom.css';
+import LiveChat from '../components/LiveChat/LiveChat';
 
 export default function JoinRoom() {
   const { roomId } = useParams();
@@ -27,6 +31,28 @@ export default function JoinRoom() {
   const [voteResults, setVoteResults] = useState({ ja: 0, nein: 0 });
   const [playerCount, setPlayerCount] = useState(0);
   const [voteCount, setVoteCount] = useState(0);
+  const { theme } = useTheme();
+  const [expandMessages, setExpandMessages] = useState(false);
+  const [messagesList, setMessagesList] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState('');
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "rooms", roomId), (doc) => {
+      // console.log("Current data: ", doc.data().messages);
+      setMessagesList(doc.data().messages);
+    });
+  }, []);
+
+  async function sendMessage() {
+    console.log('currentMessage', currentMessage);
+    const roomRef = doc(db, 'rooms', roomId);
+    await updateDoc(roomRef, {
+      messages: [...messagesList, {
+        userName: playerName,
+        content: currentMessage,
+      }],
+    })
+  }
 
   const submitVote = async () => {
     if (roomData.votingPhase.votes[playerName]) {
@@ -201,6 +227,15 @@ export default function JoinRoom() {
               )}
             </div>
           )}
+
+          <LiveChat
+            expandMessages={expandMessages}
+            setExpandMessages={setExpandMessages}
+            messagesList={messagesList}
+            sendMessage={sendMessage}
+            currentMessage={currentMessage}
+            setCurrentMessage={setCurrentMessage}
+          />
         </div>
       ) : (
         <WaitingDots text="Chargement en cours" />

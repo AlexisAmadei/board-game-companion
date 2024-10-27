@@ -21,7 +21,7 @@ export default function DefaultLayout({ children }) {
             <Outlet>
                 {children}
             </Outlet>
-            <PorteGobelet />
+            {/* <PorteGobelet /> */}
         </div>
     )
 }

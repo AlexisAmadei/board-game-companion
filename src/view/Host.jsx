@@ -70,7 +70,8 @@ const Host = () => {
                     votes: {},
                     totalVotes: 0
                 },
-                players: []
+                players: [],
+                messages: []
             });
             navigate(`/display/${roomId}`);
         } catch (error) {
