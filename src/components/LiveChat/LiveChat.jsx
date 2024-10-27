@@ -9,6 +9,7 @@ export default function LiveChat({
     setExpandMessages,
     messagesList,
     sendMessage,
+    currentMessage,
     setCurrentMessage,
 }) {
     const { theme } = useTheme();
@@ -20,6 +21,13 @@ export default function LiveChat({
     useEffect(() => {
         scrollToBottom();
     }, [messagesList]);
+
+    const handleSendMessage = (e) => {
+        if (currentMessage) {
+            sendMessage();
+            setCurrentMessage('');
+        }
+    };
     return (
         <div className={`messages-container ${theme}`}>
             <IconButton color='inherit' id='expand-messages' onClick={() => setExpandMessages(prev => !prev)}>
@@ -44,10 +52,10 @@ export default function LiveChat({
                             <input
                                 type='text'
                                 placeholder='Envoyer un message'
-                                onKeyDown={ (e) => { if (e.key === 'Enter') { sendMessage(); e.target.value = ''; } } }
                                 onChange={(e) => setCurrentMessage(e.target.value)}
+                                value={currentMessage}
                             />
-                            <button onClick={() => sendMessage()} className={`send-message ${theme}`}>
+                            <button onClick={handleSendMessage} className={`send-message ${theme}`}>
                                 Envoyer
                             </button>
                         </div>
