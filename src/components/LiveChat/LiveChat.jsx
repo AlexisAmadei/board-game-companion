@@ -2,6 +2,7 @@ import { Collapse, IconButton } from "@mui/material";
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { useTheme } from "../../contexts/ThemeContext";
 import './LiveChat.css';
+import { useEffect, useRef } from "react";
 
 export default function LiveChat({
     expandMessages,
@@ -11,6 +12,14 @@ export default function LiveChat({
     setCurrentMessage,
 }) {
     const { theme } = useTheme();
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+    useEffect(() => {
+        scrollToBottom();
+    }, [messagesList]);
     return (
         <div className={`messages-container ${theme}`}>
             <IconButton color='inherit' id='expand-messages' onClick={() => setExpandMessages(prev => !prev)}>
@@ -29,6 +38,7 @@ export default function LiveChat({
                                     <p id='content'>{message.content}</p>
                                 </div>
                             ))}
+                            <div ref={messagesEndRef} />
                         </div>
                         <div className='message-input'>
                             <input
