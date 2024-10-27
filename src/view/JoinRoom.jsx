@@ -38,13 +38,11 @@ export default function JoinRoom() {
 
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "rooms", roomId), (doc) => {
-      // console.log("Current data: ", doc.data().messages);
       setMessagesList(doc.data().messages);
     });
   }, []);
 
   async function sendMessage() {
-    console.log('currentMessage', currentMessage);
     const roomRef = doc(db, 'rooms', roomId);
     await updateDoc(roomRef, {
       messages: [...messagesList, {

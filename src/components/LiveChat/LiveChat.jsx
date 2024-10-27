@@ -28,6 +28,11 @@ export default function LiveChat({
             setCurrentMessage('');
         }
     };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [expandMessages]);
+
     return (
         <div className={`messages-container ${theme}`}>
             <IconButton color='inherit' id='expand-messages' onClick={() => setExpandMessages(prev => !prev)}>
@@ -40,7 +45,7 @@ export default function LiveChat({
                     </div>
                     <div className='messages-drawer'>
                         <div className='messages-list'>
-                            {messagesList.map((message, index) => (
+                            {messagesList?.map((message, index) => (
                                 <div className='message' key={index}>
                                     <p id='username'>{message.userName}{message.userName ? ':' : ' '}</p>
                                     <p id='content'>{message.content}</p>
@@ -54,6 +59,7 @@ export default function LiveChat({
                                 placeholder='Envoyer un message'
                                 onChange={(e) => setCurrentMessage(e.target.value)}
                                 value={currentMessage}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                             />
                             <button onClick={handleSendMessage} className={`send-message ${theme}`}>
                                 Envoyer
