@@ -11,6 +11,8 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLessRounded';
 import VoteResult from '../components/VoteResult/VoteResult';
 import ThemedButton from '../Theme/Button/ThemedButton';
 import './styles/Display.css';
+import cleanOldRooms from '../utils/cleanOldRooms';
+import fetchCollection from '../utils/fetchCollection';
 
 export default function Display() {
     const { roomId } = useParams();
@@ -25,6 +27,15 @@ export default function Display() {
         results: {
         },
     });
+
+   async function launchCleanOldRooms() {
+        const rooms = await fetchCollection(db, 'rooms');
+        cleanOldRooms(rooms);
+    }
+
+   useEffect(() => {
+       launchCleanOldRooms();
+    }, []);
 
     useEffect(() => {
         const roomRef = doc(db, 'rooms', roomId);

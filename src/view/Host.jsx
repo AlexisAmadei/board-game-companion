@@ -39,7 +39,6 @@ const Host = () => {
         if (rooms.length > 0) {
             createRoomId();
         }
-        cleanOldRooms(rooms);
     }, [rooms]);
 
     function validerNomDeSalle(nom) {
