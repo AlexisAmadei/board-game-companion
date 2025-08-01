@@ -1,8 +1,8 @@
-# Secret Hitler - React App
+# Secret H - React App
 
 ## Overview
 
-This is a digital implementation of the popular board game **Secret Hitler**, built using **React**. The app allows players to vote digitally instead of using physical game cards, reducing delays and improving game flow. The purpose of the app is NOT to replace the real game but to streamline the voting process.
+This is a digital implementation of the popular board game **Secret H**, built using **React**. The app allows players to vote digitally instead of using physical game cards, reducing delays and improving game flow. The purpose of the app is NOT to replace the real game but to streamline the voting process.
 
 #### Create a new game at:
 
@@ -48,5 +48,5 @@ For issues or suggestions, feel free to open an issue on GitHub or reach out via
 
 ## Acknowledgment
 
-We would like to express our gratitude to the creators of the **Secret Hitler** board game for their brilliant design and engaging gameplay, which inspired this digital adaptation. **Secret Hitler** is a trademark of Goat, Wolf, & Cabbage LLC. This project is an unofficial companion app and is not affiliated with, endorsed by, or associated with the official **Secret Hitler** board game or its creators in any way. All rights to the original game, including its mechanics, design, and branding, remain with Goat, Wolf, & Cabbage LLC.
+We would like to express our gratitude to the creators of the **Secret H** board game for their brilliant design and engaging gameplay, which inspired this digital adaptation. **Secret H** is a trademark of Goat, Wolf, & Cabbage LLC. This project is an unofficial companion app and is not affiliated with, endorsed by, or associated with the official **Secret H** board game or its creators in any way. All rights to the original game, including its mechanics, design, and branding, remain with Goat, Wolf, & Cabbage LLC.
 
