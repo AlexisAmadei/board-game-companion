@@ -8,7 +8,7 @@
     font-size: calc(6px + 4vmin);
     text-align: center;
     color: var(--text);
-    background-color: var(--tertiary);
+    background-color: var(--secondary);
     cursor: pointer;
     margin: 2px 8px;
     position: relative;
@@ -17,6 +17,7 @@
 }
 .button-light:active {
     top: 5px;
+    background-color: var(--primary);
 }
 .button-light:hover {
     background-color: var(--secondary);
@@ -24,7 +25,7 @@
 
 .button-dark {
     border: 2px solid var(--primary);
-    background-color: #35332f;
+    background-color: var(--secondary);
     border-radius: 10px;
     padding: 10px 25px;
     font-family: 'Germania One', cursive;
