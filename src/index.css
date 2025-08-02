@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Germania+One&display=swap');
+@import url('./styles/var.css');
 
 :root {
   font-family: 'Germania one', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -6,14 +7,6 @@
   font-weight: 400;
 
   color-scheme: only light;
-  --background: #e3644b;
-  --primary: #e3644b;
-  --secondary: #383733;
-  --tertiary: #5E584A;
-  --text: #ffffff;
-
-  --dark-tertiary: #383733;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
