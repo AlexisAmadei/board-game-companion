@@ -25,3 +25,4 @@ dist-ssr
 *.sw?
 .firebase/hosting.cHVibGlj.cache
 .firebase/hosting.ZGlzdA.cache
+src/config/firebase.js
