@@ -1,4 +1,4 @@
-# Secret H - React App
+# Board game companion - React App
 
 ## Overview
 
