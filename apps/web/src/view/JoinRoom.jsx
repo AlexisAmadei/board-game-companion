@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { db } from '../config/firebase';
-import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { subscribeRoom, joinRoom, sendMessage as sendMessageApi, submitVote as submitVoteApi } from '../config/api';
 
 import { Collapse, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreRounded';
@@ -36,20 +35,16 @@ export default function JoinRoom() {
   const [messagesList, setMessagesList] = useState([]);
   const [currentMessage, setCurrentMessage] = useState('');
 
+  // Keep the chat list in sync with the room state pushed over SSE.
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, "rooms", roomId), (doc) => {
-      setMessagesList(doc.data().messages);
-    });
-  }, []);
+    if (roomData?.messages) {
+      setMessagesList(roomData.messages);
+    }
+  }, [roomData]);
 
   async function sendMessage() {
-    const roomRef = doc(db, 'rooms', roomId);
-    await updateDoc(roomRef, {
-      messages: [...messagesList, {
-        userName: playerName,
-        content: currentMessage,
-      }],
-    })
+    await sendMessageApi(roomId, playerName, currentMessage);
+    setCurrentMessage('');
   }
 
   const submitVote = async () => {
@@ -61,11 +56,10 @@ export default function JoinRoom() {
       setErrorMessage('Selectionnez un vote');
       return;
     }
-    if (selectedVote) {
-      const roomRef = doc(db, 'rooms', roomId);
-      await updateDoc(roomRef, {
-        [`votingPhase.votes.${playerName}`]: selectedVote,
-      });
+    try {
+      await submitVoteApi(roomId, playerName, selectedVote);
+    } catch (error) {
+      setErrorMessage(error.message);
     }
   }
 
@@ -77,24 +71,12 @@ export default function JoinRoom() {
   };
 
   useEffect(() => {
-    const roomRef = doc(db, 'rooms', roomId);
-    const fetchRoom = async () => {
-      const docSnap = await getDoc(roomRef);
-      if (docSnap.exists()) {
-        setRoomData(docSnap.data());
-        if (!docSnap.data().players.includes(playerName)) {
-          await updateDoc(roomRef, {
-            players: [...docSnap.data().players, playerName],
-          });
-        }
-      }
-    };
-    fetchRoom();
-    const unsubscribe = onSnapshot(roomRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setRoomData(snapshot.data());
-      }
+    // Ensure this player is in the room (no-op if already present), then
+    // subscribe to live room updates.
+    joinRoom(roomId, playerName).catch((err) => {
+      if (err.status !== 409) console.error('join failed', err);
     });
+    const unsubscribe = subscribeRoom(roomId, setRoomData);
     return () => unsubscribe();
   }, [roomId, playerName]);
 

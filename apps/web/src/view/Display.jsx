@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { subscribeRoom, startVoting, stopVoting, kickPlayer as kickPlayerApi } from '../config/api';
 import Collapse from '@mui/material/Collapse';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -11,8 +10,6 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLessRounded';
 import VoteResult from '../components/VoteResult/VoteResult';
 import ThemedButton from '../Theme/Button/ThemedButton';
 import './styles/Display.css';
-import cleanOldRooms from '../utils/cleanOldRooms';
-import fetchCollection from '../utils/fetchCollection';
 
 export default function Display() {
     const { roomId } = useParams();
@@ -28,40 +25,18 @@ export default function Display() {
         },
     });
 
-   async function launchCleanOldRooms() {
-        const rooms = await fetchCollection(db, 'rooms');
-        cleanOldRooms(rooms);
-    }
-
-   useEffect(() => {
-       launchCleanOldRooms();
-    }, []);
-
     useEffect(() => {
-        const roomRef = doc(db, 'rooms', roomId);
-        const unsubscribe = onSnapshot(roomRef, (snapshot) => {
-            if (snapshot.exists()) {
-                setRoomData(snapshot.data());
-            }
-        });
+        const unsubscribe = subscribeRoom(roomId, setRoomData);
         return () => unsubscribe();
     }, [roomId]);
 
     const startVotingPhase = async () => {
         setDisplayResults({ show: false, results: {} });
-        const roomRef = doc(db, 'rooms', roomId);
-        await updateDoc(roomRef, {
-            "votingPhase.inProgress": true,
-            "votingPhase.votes": {},
-            "votingPhase.totalVotes": 0,
-        });
+        await startVoting(roomId);
     };
 
     const kickPlayer = async (playerName) => {
-        const roomRef = doc(db, 'rooms', roomId);
-        await updateDoc(roomRef, {
-            players: roomData.players.filter((player) => player !== playerName),
-        });
+        await kickPlayerApi(roomId, playerName);
     };
 
     useEffect(() => {
@@ -127,10 +102,7 @@ export default function Display() {
     }
 
     const endVotingPhase = async () => {
-        const roomRef = doc(db, 'rooms', roomId);
-        await updateDoc(roomRef, {
-            "votingPhase.inProgress": false,
-        });
+        await stopVoting(roomId);
         calculateResults();
     };
 

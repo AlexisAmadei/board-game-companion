@@ -1,45 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../config/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { createRoom } from '../config/api';
 import ErrorMessage from '../components/ErrorMessage';
-import fetchCollection from '../utils/fetchCollection';
-import cleanOldRooms from '../utils/cleanOldRooms';
 import ThemedButton from '../Theme/Button/ThemedButton';
 import './styles/Host.css';
 
 const Host = () => {
     const [gameName, setGameName] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [roomId, setRoomId] = useState('');
-    const [rooms, setRooms] = useState([]);
     const navigate = useNavigate();
-
-    async function createRoomId() {
-        const roomsData = await fetchCollection(db, 'rooms');
-        const newRoomId = Math.random().toString(36).substring(2, 7);
-        const roomExists = roomsData.some((room) => room.gameId === newRoomId);
-
-        if (roomExists) {
-            return await createRoomId();
-        } else {
-            setRoomId(newRoomId);
-        }
-    }
-
-    useEffect(() => {
-        const fetchRooms = async () => {
-            const roomsData = await fetchCollection(db, 'rooms');
-            setRooms(roomsData);
-        };
-        fetchRooms();
-    }, []);
-
-    useEffect(() => {
-        if (rooms.length > 0) {
-            createRoomId();
-        }
-    }, [rooms]);
 
     function validerNomDeSalle(nom) {
         const regex = /^[A-Za-z\s]+$/;
@@ -59,23 +28,11 @@ const Host = () => {
             return;
         }
         try {
-            await setDoc(doc(db, 'rooms', roomId), {
-                name: gameName,
-                createdAt: new Date(),
-                gameId: roomId,
-                status: 'waiting',
-                votingPhase: {
-                    inProgress: false,
-                    votes: {},
-                    totalVotes: 0
-                },
-                players: [],
-                messages: []
-            });
-            navigate(`/display/${roomId}`);
+            const room = await createRoom(gameName);
+            navigate(`/display/${room.gameId}`);
         } catch (error) {
             console.error('Erreur lors de la création de la partie: ', error);
-            setErrorMessage("Impossible de créer la partie. Veuillez réessayer.");
+            setErrorMessage(error.message || "Impossible de créer la partie. Veuillez réessayer.");
         }
     };
 
