@@ -20,8 +20,66 @@ This is a digital implementation of the popular board game **Secret H**, built u
 
 ## Tech Stack
 
-- **Frontend**: React 18.3.1 with Vite 5.4.1
-- **Backend**: Firebase
+- **Monorepo**: [Turborepo](https://turbo.build/) with npm workspaces
+- **Frontend** (`apps/web`): React 18 + Vite — deployed on **Vercel**
+- **Backend** (`apps/api`): Express + SQLite (`better-sqlite3`), real-time via
+  Server-Sent Events — runs in a **Docker** container on a custom VPS
+
+## Project structure
+
+```
+.
+├── apps/
+│   ├── web/   # React + Vite frontend (Vercel)
+│   └── api/   # Express + SQLite backend (Docker / VPS)
+├── docker-compose.yml
+├── turbo.json
+└── package.json   # npm workspaces root
+```
+
+## Local development
+
+```sh
+npm install            # install all workspaces
+
+# Backend (http://localhost:3001)
+cp apps/api/.env.example apps/api/.env
+npm run dev --workspace=@board-game-companion/api
+
+# Frontend (http://localhost:5173)
+cp apps/web/.env.example apps/web/.env   # VITE_API_URL=http://localhost:3001
+npm run dev --workspace=@board-game-companion/web
+
+# …or run everything at once
+npm run dev            # turbo runs every app's dev task
+```
+
+### API overview
+
+The backend exposes a small REST API under `/api/rooms` plus an SSE stream
+(`GET /api/rooms/:id/events`) that pushes the full room state on every change —
+the replacement for Firestore's `onSnapshot`. Each room is stored as a JSON blob
+in SQLite. Rooms older than 48h are purged hourly by the server.
+
+## Deployment
+
+### Frontend → Vercel
+
+Point the Vercel project's **Root Directory** at `apps/web` (Vercel detects the
+Turborepo automatically). Set the environment variable `VITE_API_URL` to the
+public URL of your backend (e.g. `https://api.yourdomain.com`).
+
+### Backend → Docker on a VPS
+
+```sh
+# build & run with the provided compose file
+CORS_ORIGIN=https://your-app.vercel.app docker compose up -d --build
+```
+
+The SQLite database is persisted on the `api-data` Docker volume. Configure
+`CORS_ORIGIN` (comma-separated allowlist) so only the Vercel frontend can call
+the API, and put the container behind a reverse proxy (nginx/Caddy/Traefik) for
+TLS.
 
 ## Contributing
 

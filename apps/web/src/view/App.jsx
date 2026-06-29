@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Box, IconButton, Modal } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { collection, getDocs, updateDoc, query, where } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { joinRoom as joinRoomApi } from '../config/api';
 import logo from '../assets/kiwiDevLogo-transparent.png';
 import ThemedButton from '../Theme/Button/ThemedButton';
 import ErrorMessage from '../components/ErrorMessage';
@@ -28,29 +27,18 @@ export default function App() {
                 setErrorMessage('L\'ID de la partie et le nom du joueur ne peuvent pas être vides.');
                 return;
             }
-            const roomRef = collection(db, 'rooms');
-            const q = query(roomRef, where('gameId', '==', roomId));
-            const roomSnapshot = await getDocs(q);
-            if (roomSnapshot.empty) {
-                setErrorMessage('partie non trouvée, veuillez vérifier l\'ID de la partie.');
-                return;
-            }
-            roomSnapshot.forEach(async (doc) => {
-                const roomData = doc.data();
-                const updatedPlayers = [...roomData.players, pseudo];
-                if (roomData.players.includes(pseudo)) {
-                    setErrorMessage('Joueur déjà présent dans la partie.');
-                    return;
-                }
-                await updateDoc(doc.ref, {
-                    players: updatedPlayers,
-                });
-                localStorage.setItem('playerName', pseudo);
-                navigate(`/join/${roomId}`);
-            });
+            await joinRoomApi(roomId, pseudo);
+            localStorage.setItem('playerName', pseudo);
+            navigate(`/join/${roomId}`);
         } catch (error) {
             console.error('Erreur pendant la connexion à la partie: ', error);
-            setErrorMessage('Une erreur s\'est produite lors de la connexion à la partie.');
+            if (error.status === 404) {
+                setErrorMessage('partie non trouvée, veuillez vérifier l\'ID de la partie.');
+            } else if (error.status === 409) {
+                setErrorMessage('Joueur déjà présent dans la partie.');
+            } else {
+                setErrorMessage('Une erreur s\'est produite lors de la connexion à la partie.');
+            }
         }
     };
 
