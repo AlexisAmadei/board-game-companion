@@ -6,7 +6,7 @@ export default function NotFound() {
     <div className='notFoundPage'>
       <h1>404</h1>
       <p>Page non trouvée</p>
-      <Link to='/' id='backToHome'>Retour à l'accueil</Link>
+      <Link to='/' id='backToHome'>Retour à l&apos;accueil</Link>
     </div>
   )
 }

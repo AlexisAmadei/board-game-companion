@@ -5,7 +5,6 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../contexts/ThemeContext";
 import './DefaultLayout.css';
-import PorteGobelet from "../components/PorteGobelet/PorteGobelet";
 
 export default function DefaultLayout({ children }) {
     const navigate = useNavigate();

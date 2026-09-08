@@ -22,7 +22,7 @@ export default function LiveChat({
         scrollToBottom();
     }, [messagesList]);
 
-    const handleSendMessage = (e) => {
+    const handleSendMessage = () => {
         if (currentMessage) {
             sendMessage();
             setCurrentMessage('');

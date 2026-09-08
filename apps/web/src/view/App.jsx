@@ -1,10 +1,9 @@
-import React, { useCallback, useState } from 'react';
-import { Box, IconButton, Modal } from '@mui/material';
+import { useCallback, useState } from 'react';
+import { Box, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { joinRoom as joinRoomApi } from '../config/api';
 import logo from '../assets/kiwiDevLogo-transparent.png';
 import ThemedButton from '../Theme/Button/ThemedButton';
-import ErrorMessage from '../components/ErrorMessage';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import Banner from '../assets/banner.png';
 import './styles/App.css';

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, Modal } from '@mui/material'
 import ThemedButton from '../../Theme/Button/ThemedButton'
 import ErrorMessage from '../ErrorMessage'

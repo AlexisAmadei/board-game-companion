@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { subscribeRoom, joinRoom, sendMessage as sendMessageApi, submitVote as submitVoteApi } from '../config/api';
 
@@ -10,7 +10,6 @@ import jaCard from '../assets/voting_ja.webp';
 import neinCard from '../assets/voting_nein.webp';
 import WaitingDots from '../components/WaitingDots';
 import ThemedButton from '../Theme/Button/ThemedButton';
-import { useTheme } from '../contexts/ThemeContext';
 import './styles/JoinRoom.css';
 import LiveChat from '../components/LiveChat/LiveChat';
 
@@ -30,7 +29,6 @@ export default function JoinRoom() {
   const [voteResults, setVoteResults] = useState({ ja: 0, nein: 0 });
   const [playerCount, setPlayerCount] = useState(0);
   const [voteCount, setVoteCount] = useState(0);
-  const { theme } = useTheme();
   const [expandMessages, setExpandMessages] = useState(false);
   const [messagesList, setMessagesList] = useState([]);
   const [currentMessage, setCurrentMessage] = useState('');
@@ -137,7 +135,7 @@ export default function JoinRoom() {
   };
 
   return (
-    <div div="game-container">
+    <div className="game-container">
       {roomData ? (
         <div className='game-view'>
           <div id='page-title'>

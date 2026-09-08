@@ -1,9 +1,8 @@
 import BMC from '../../assets/bmc/bmc-logo.svg';
-import LocalCafeIcon from '@mui/icons-material/LocalCafe';
 import { useTheme } from '../../contexts/ThemeContext';
 import './PorteGobelet.css';
 import { useState } from 'react';
-import { Box, Collapse } from '@mui/material';
+import { Collapse } from '@mui/material';
 
 export default function PorteGobelet() {
     const { theme } = useTheme();
