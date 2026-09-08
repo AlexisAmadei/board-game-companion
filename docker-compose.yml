@@ -1,7 +1,30 @@
+# Local development and self-managed deployment. On Dokploy the Postgres
+# service and the API application are created separately in the UI; see README.
 services:
+  db:
+    image: postgres:17-alpine
+    container_name: board-game-companion-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: bgc
+      POSTGRES_USER: bgc
+      POSTGRES_PASSWORD: bgc
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bgc -d bgc"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   api:
     build:
-      context: ./apps/api
+      # Context is the repo root so the pnpm lockfile and workspace manifest
+      # are reachable; without them the image install is unpinned.
+      context: .
+      dockerfile: apps/api/Dockerfile
     image: board-game-companion-api
     container_name: board-game-companion-api
     restart: unless-stopped
@@ -9,11 +32,12 @@ services:
       - "${API_PORT:-3001}:3001"
     environment:
       PORT: 3001
-      DATABASE_PATH: /data/app.db
+      DATABASE_URL: postgresql://bgc:bgc@db:5432/bgc
       # Comma-separated allowlist; set to your Vercel URL in production.
       CORS_ORIGIN: ${CORS_ORIGIN:-*}
-    volumes:
-      - api-data:/data
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
-  api-data:
+  db-data:

@@ -1,27 +1,35 @@
-# --- build stage: compile better-sqlite3 native bindings ---
+# Build context is the REPO ROOT (see docker-compose.yml / Dokploy settings),
+# so the pnpm lockfile and workspace manifest are reachable.
+# pg is pure JS, so unlike better-sqlite3 there is no C++ toolchain to install.
 FROM node:22-bookworm-slim AS build
-WORKDIR /app
+ENV PNPM_HOME=/pnpm
+ENV PATH="/pnpm:$PATH"
+RUN corepack enable
+WORKDIR /repo
 
-# Toolchain required to build better-sqlite3 from source.
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 make g++ \
-    && rm -rf /var/lib/apt/lists/*
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/api/package.json apps/api/
+RUN pnpm install --frozen-lockfile --filter @board-game-companion/api
 
-COPY package.json ./
-RUN npm install --omit=dev
+COPY apps/api ./apps/api
+# pnpm's node_modules is a tree of symlinks into a content-addressed store and
+# cannot be COPY'd across stages. `pnpm deploy` materialises a self-contained
+# directory of real files. --legacy because the API has no workspace deps to
+# inject, which is what pnpm 11 otherwise expects here.
+RUN pnpm deploy --legacy --filter=@board-game-companion/api --prod /prod/api
 
-# --- runtime stage ---
 FROM node:22-bookworm-slim AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3001
-# Persisted on a Docker volume; see docker-compose.yml.
-ENV DATABASE_PATH=/data/app.db
 
-COPY --from=build /app/node_modules ./node_modules
-COPY package.json ./
-COPY src ./src
+COPY --from=build /prod/api ./
 
-RUN mkdir -p /data
+USER node
 EXPOSE 3001
+
+# The slim image has no curl; Node 22 has a global fetch.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:3001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+
 CMD ["node", "src/index.js"]

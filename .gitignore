@@ -19,12 +19,6 @@ dist-ssr
 # turbo
 .turbo
 
-# sqlite database files
-apps/api/data/
-*.db
-*.db-shm
-*.db-wal
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -1,54 +1,39 @@
-import Database from 'better-sqlite3';
-import { mkdirSync } from 'node:fs';
-import { dirname } from 'node:path';
+import pg from 'pg';
+import { config } from './config.js';
 
-// SQLite file location. Defaults to ./data/app.db, overridable for Docker volumes.
-const DB_PATH = process.env.DATABASE_PATH || new URL('../data/app.db', import.meta.url).pathname;
-mkdirSync(dirname(DB_PATH), { recursive: true });
+// No `ssl` option: on Dokploy the API and Postgres share a private overlay
+// network, and locally it is a container on the same host.
+export const pool = new pg.Pool({
+  ...(config.databaseUrl ? { connectionString: config.databaseUrl } : {}),
+  max: 10,
+  idleTimeoutMillis: 60_000,
+  connectionTimeoutMillis: 5_000,
+  application_name: 'board-game-companion-api',
+});
 
-const db = new Database(DB_PATH);
-db.pragma('journal_mode = WAL');
+// Mandatory: an error raised on an idle client is emitted on the pool, and an
+// unhandled 'error' event takes the process down.
+pool.on('error', (err) => console.error('[pg] idle client error', err));
 
-// Each room is stored as a JSON blob to preserve the exact document shape the
-// frontend expects. `game_id` and `created_at` are kept as columns for lookups
-// and TTL cleanup.
-db.exec(`
-  CREATE TABLE IF NOT EXISTS rooms (
-    game_id    TEXT PRIMARY KEY,
-    created_at INTEGER NOT NULL,
-    data       TEXT NOT NULL
-  );
-`);
+export const query = (text, values) => pool.query(text, values);
 
-const statements = {
-  insert: db.prepare('INSERT INTO rooms (game_id, created_at, data) VALUES (?, ?, ?)'),
-  update: db.prepare('UPDATE rooms SET data = ? WHERE game_id = ?'),
-  get: db.prepare('SELECT data FROM rooms WHERE game_id = ?'),
-  exists: db.prepare('SELECT 1 FROM rooms WHERE game_id = ?'),
-  deleteOlderThan: db.prepare('DELETE FROM rooms WHERE created_at < ?'),
-};
-
-export function roomExists(gameId) {
-  return statements.exists.get(gameId) !== undefined;
+// Retries a fn with backoff. Used at boot so a database that is still starting
+// up does not hard-fail a deploy.
+export async function withRetry(fn, { attempts = 10, label = 'operation' } = {}) {
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (attempt >= attempts) throw err;
+      const delay = Math.min(1000 * attempt, 10_000);
+      console.warn(`[db] ${label} failed (attempt ${attempt}/${attempts}), retrying in ${delay}ms:`, err.message);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
 }
 
-export function getRoom(gameId) {
-  const row = statements.get.get(gameId);
-  return row ? JSON.parse(row.data) : null;
+export async function healthCheck() {
+  await pool.query('SELECT 1');
 }
 
-export function createRoom(room) {
-  statements.insert.run(room.gameId, room.createdAt, JSON.stringify(room));
-  return room;
-}
-
-export function saveRoom(room) {
-  statements.update.run(JSON.stringify(room), room.gameId);
-  return room;
-}
-
-export function deleteRoomsOlderThan(timestamp) {
-  return statements.deleteOlderThan.run(timestamp).changes;
-}
-
-export default db;
+export const close = () => pool.end();
