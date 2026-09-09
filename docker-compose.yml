@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: bgc
       POSTGRES_PASSWORD: bgc
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - "${DB_PORT:-5445}:5445"
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
@@ -32,7 +32,7 @@ services:
       - "${API_PORT:-3001}:3001"
     environment:
       PORT: 3001
-      DATABASE_URL: postgresql://bgc:bgc@db:5432/bgc
+      DATABASE_URL: postgresql://bgc:bgc@db:5445/bgc
       # Comma-separated allowlist; set to your Vercel URL in production.
       CORS_ORIGIN: ${CORS_ORIGIN:-*}
     depends_on:
