@@ -29,9 +29,9 @@ services:
     container_name: board-game-companion-api
     restart: unless-stopped
     ports:
-      - "${API_PORT:-3001}:3001"
+      - "${API_PORT:-3945}:3945"
     environment:
-      PORT: 3001
+      PORT: 3945
       DATABASE_URL: postgresql://bgc:bgc@db:5445/bgc
       # Comma-separated allowlist; set to your Vercel URL in production.
       CORS_ORIGIN: ${CORS_ORIGIN:-*}
